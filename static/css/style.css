@@ -1,0 +1,42 @@
+div {
+  height: 100%;
+}
+
+div {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 0 30px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: reverse;
+  -ms-flex-direction: column-reverse;
+  flex-direction: column-reverse;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  font-family: "Open Sans", Helvetica, Arial, sans-serif;
+}
+
+h1 {
+  margin-bottom: 20px;
+  font-size: 20px;
+  font-weight: 300;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 5px;
+  color: #bbb;
+}
+h1 #metamusic {
+  border: 2px solid #26a69a;
+  padding: 3px 2px 3px 7px;
+  border-radius: 6px;
+  font-weight: 400;
+}
+
+#submit_button {
+  margin: 0 auto;
+
+  display: flex;
+}

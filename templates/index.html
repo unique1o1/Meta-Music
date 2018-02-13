@@ -6,15 +6,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+
+    <link rel="stylesheet" href="static/css/style.css">
+
 </head>
 
 <body>
+
+    <div>
+        <p></p>
+        <h1>
+            <span id="metamusic">Meta</span> Music</h1>
+
+
+    </div>
+
+
+    <input type="text" placeholder="Enter your Music directory" width="100px">
+
+
+
+    <button class="btn waves-effect waves-light" type="submit" id="submit_button" name="action">Submit
+
+    </button>
+    <!--
     <input type="checkbox" name="box" id="folder" onclick="changemode()" checked>
     <input type="file" id="filepicker" name="fileList" webkitdirectory />
     <ul id="listing"></ul>
+-->
 
 
     <script>
+        //directoryc codes
         function changemode() {
             var checkbox = document.getElementById("folder")
             if (checkbox.checked) {
