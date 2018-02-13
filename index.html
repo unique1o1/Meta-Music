@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <input type="checkbox" name="box" id="folder" onclick="changemode()" checked>
+    <input type="file" id="filepicker" name="fileList" webkitdirectory />
+    <ul id="listing"></ul>
+
+
+    <script>
+        function changemode() {
+            var checkbox = document.getElementById("folder")
+            if (checkbox.checked) {
+                document.getElementById("filepicker").setAttribute('webkitdirectory', "");
+
+            }
+            else {
+                document.getElementById("filepicker").removeAttribute("webkitdirectory");
+
+            }
+        }
+        document.getElementById("filepicker").addEventListener("change", function (event) {
+            let output = document.getElementById("listing");
+            let files = document.getElementById("filepicker").files;
+            console.log(files);
+
+            for (let i = 0; i < files.length; i++) {
+                let item = document.createElement("li");
+                item.innerHTML = files[i].name;
+                //console.log(files[i]);
+                output.appendChild(item);
+            };
+        }, false);
+    </script>
+</body>
+
+</html>
