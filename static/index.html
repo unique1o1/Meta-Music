@@ -6,36 +6,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
 
-    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="dist/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.css">
 
 </head>
 
 <body>
 
-    <div>
-        <p></p>
-        <h1>
-            <span id="metamusic">Meta</span> Music</h1>
 
 
-    </div>
+    <section class="section">
+        <div class="container">
 
-
-    <input type="text" placeholder="Enter your Music directory" width="100px">
+            <h1>
+                <span id="metamusic">Meta</span> Music</h1>
 
 
 
-    <button class="btn waves-effect waves-light" type="submit" id="submit_button" name="action">Submit
+            <br>
 
-    </button>
+
+            <form action="/process" method="post">
+                <input class="input is-rounded" type="text" placeholder="Enter your Music directory" width="150px">
+
+                <br>
+                <br>
+
+                <input type="submit" value="Process" class="button is-primary" id="ind">
+            </form>
+
+
+
+        </div>
+    </section>
+
+
     <!--
-    <input type="checkbox" name="box" id="folder" onclick="changemode()" checked>
-    <input type="file" id="filepicker" name="fileList" webkitdirectory />
-    <ul id="listing"></ul>
--->
-
 
     <script>
         //directoryc codes
@@ -63,6 +70,8 @@
             };
         }, false);
     </script>
+-->
+
 </body>
 
 </html>
