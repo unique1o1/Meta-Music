@@ -1,0 +1,26 @@
+h1 {
+  margin-bottom: 20px;
+  font-size: 20px;
+  font-weight: 300;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 5px;
+  color: #bbb;
+}
+h1 #metamusic {
+  border: 2px solid #26a69a;
+  padding: 3px 2px 3px 7px;
+  border-radius: 6px;
+  font-weight: 400;
+}
+
+input {
+  text-align: center;
+}
+input[type="submit"] {
+  display: block;
+  margin: 0 auto;
+}
+.inblock {
+  display: :inline-block;
+}
