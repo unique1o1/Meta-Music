@@ -27,13 +27,11 @@ export default class App extends React.Component {
   }
 
   render() {
-    return (
+    return this.state.loading ? (
+      <div>dsf</div>
+    ) : (
       <div className="card" style={{ width: "18rem" }}>
-        {this.state.loading ? (
-          <input type="hidden" />
-        ) : (
-          <Card resp={this.state.data} />
-        )}
+        <Card resp={this.state.data} />
       </div>
     );
   }

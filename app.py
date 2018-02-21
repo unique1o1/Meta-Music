@@ -25,13 +25,7 @@ def index():
 
 @app.route("/process", methods=["GET"])
 def process():
-    # a = int(random.random() * 10 % 10)
 
-    # print("inside this")
-    # for i in range(5):
-
-    #     time.sleep(2)
-    #     print("sleep {}".format(a))
     path = request.args['path']
     total_songs = 0
     p = Pool()
