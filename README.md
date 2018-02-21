@@ -2,6 +2,7 @@
 Meta-Music is an open-source project that lets people add metadata to their Music library.
 
 installation for you guys:
+
         cd static
         npm install 
         cd ..
