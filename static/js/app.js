@@ -4,7 +4,8 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: []
+      data: {},
+      loading: true
     };
   }
 
@@ -13,37 +14,26 @@ export default class App extends React.Component {
   //     setTimeout(resolve, second * 1000);
   //   });
   // }
-  shouldComponentUpdate(nextProps, nextState) {
-    return false;
-  }
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   return false;
+  // }
 
-  loaddatas(value) {
-    fetch("http://127.0.0.1:5000/fetch/" + value)
+  componentDidMount() {
+    fetch("http://127.0.0.1:5000/fetch/" + this.props.songno)
       .then(response => response.json())
-      .then(Data =>
-        this.setState(prevState => ({
-          data: [...prevState.data, Data]
-        }))
-      );
+      .then(Data => {
+        this.setState({ data: Data, loading: false });
+      });
   }
 
   render() {
     return (
-      <div className="card-deck">
-        {Array.from(
-          { length: document.getElementById("totalsongs").value },
-          (x, i) => i
-        ).map((value, index) => {
-          this.loaddatas(value);
-          // while (this.state.data[value] == null) {
-          //   setTimeout(() => {
-          //     console.log(this.state.data);
-          //   }, 3000);
-          // }
-
-          return <Card key={index} />;
-          // console.log(results);
-        })}
+      <div className="card" style={{ width: "18rem" }}>
+        {this.state.loading ? (
+          <input type="hidden" />
+        ) : (
+          <Card resp={this.state.data} />
+        )}
       </div>
     );
   }
