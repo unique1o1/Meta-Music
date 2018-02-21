@@ -1,7 +1,11 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, jsonify
 import multiprocessing
+from multiprocessing import Pool
 import time
-from model import db
+import os
+import numpy as np
+
+from model import db, fetcher_database
 import random
 from fetcher import process_init
 app = Flask(__name__, static_folder="./static/dist",
@@ -29,12 +33,38 @@ def process():
     #     time.sleep(2)
     #     print("sleep {}".format(a))
     path = request.args['path']
+    total_songs = 0
+    p = Pool()
+    for root, dirs, files in os.walk(path):
 
-    t = multiprocessing.Process(target=process_init, args=(path, app,db))
+        results = p.map(f, files)
+        total_songs += np.sum(np.array(results) > 0)
+    p.close()
+    p.join()
+    t = multiprocessing.Process(target=process_init, args=(path, app, db))
+    # t.daemon = True
     t.start()
 
-    return render_template("process.html")
+    return render_template("process.html", totalsongs=total_songs)
+
+
+@app.route('/fetch/<int:no>')
+def fetch(no):
+    return_data = fetcher_database.query.filter_by(uid=no).first()
+
+    if return_data is None:
+        return 0
+
+    return jsonify(trackname=return_data.trackname, tracknumber=return_data.tracknumber, albumname=return_data.albumname, image_url=return_data.image_url, releasedate=return_data.releasedate,
+                   genre=return_data.genre, artistname=return_data.artistname)
+
+
+def f(n):
+    if (n.endswith('.mp3')):
+        return 1
+    else:
+        return 0
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, threaded=True)

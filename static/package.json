@@ -25,5 +25,8 @@
       "es2015",
       "react"
     ]
+  },
+  "dependencies": {
+    "request": "^2.83.0"
   }
 }
