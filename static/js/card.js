@@ -1,47 +1,37 @@
 import React from "react";
+
+import * as randomMC from "random-material-color";
 export default class Card extends React.Component {
   render() {
     return (
-      <div style={{ lineHeight: 0.8 }}>
-        <img
-          className="card-img-top"
-          src={this.props.resp.image_url}
-          alt="Card image cap"
-        />
-
-        <div
-          className="card-body"
-          style={{ display: "block", height: "120px", lineHeight: "1px" }}
+      <div>
+        <header
+          className="skill-card__header"
+          style={{ backgroundColor: randomMC.getColor() }}
         >
-          <p
-            className="card-title"
-            style={{ padding: "5px 0", fontSize: "18px" }}
-          >
-            <b>
-              {this.props.resp.trackname.length > 21
-                ? this.props.resp.trackname.slice(0, 21) + "..."
-                : this.props.resp.trackname}
-            </b>
+          <img
+            className="skill-card__icon "
+            src={this.props.resp.image_url}
+            alt="HTML5 Logo "
+          />
+        </header>
+        <section className="skill-card__body ">
+          <p className="skill-card__title ">
+            {this.props.resp.trackname.slice(0, 18)}
           </p>
-          <p
-            className="card-title"
-            style={{ padding: "5px 0", fontSize: "16px" }}
-          >
-            {this.props.resp.artistname}
-          </p>
-          <p
-            className="card-title"
-            style={{ padding: "5px 0", fontSize: "16px" }}
-          >
-            {" "}
+          <p> {this.props.resp.artistname}</p>
+
+          <span className="skill-card__duration">
             {this.props.resp.albumname.length > 21
               ? this.props.resp.albumname.slice(0, 21) + "..."
               : this.props.resp.albumname}
-          </p>
-          <p className="card-text" />
-          {this.props.resp.tracknumber},{" "}
-          {this.props.resp.releasedate.slice(0, 16)}, {this.props.resp.genre}
-        </div>
+          </span>
+          <ul className="skill-card__knowledge ">
+            <li> {this.props.resp.tracknumber}</li>
+            <li> {this.props.resp.releasedate.slice(0, 16)}</li>
+            <li> {this.props.resp.genre}</li>
+          </ul>
+        </section>
       </div>
     );
   }
