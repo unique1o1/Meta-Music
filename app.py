@@ -4,6 +4,7 @@ from multiprocessing import Pool
 import time
 import os
 import numpy as np
+import random
 
 from model import db, fetcher_database
 import random
@@ -38,7 +39,7 @@ def process():
     t = multiprocessing.Process(target=process_init, args=(path, app, db))
     # t.daemon = True
     t.start()
-    time.sleep(2)
+
     return render_template("process.html", totalsongs=total_songs)
 
 
@@ -48,7 +49,8 @@ def fetch(no):
 
     if return_data is None:
         return 0
-
+    # if random.randint(7, 8) % 2 == 0:
+    time.sleep(5)
     return jsonify(trackname=return_data.trackname, tracknumber=return_data.tracknumber, albumname=return_data.albumname, image_url=return_data.image_url, releasedate=return_data.releasedate,
                    genre=return_data.genre, artistname=return_data.artistname, uid=return_data.uid, loading=True)
 
