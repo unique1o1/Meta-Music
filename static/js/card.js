@@ -23,13 +23,14 @@ export default class Card extends React.Component {
 
           <span className="skill-card__duration">
             {this.props.resp.albumname.length > 21
-              ? this.props.resp.albumname.slice(0, 21) + "..."
+              ? this.props.resp.albumname.slice(0, 21) + ".."
               : this.props.resp.albumname}
           </span>
           <ul className="skill-card__knowledge ">
             <li> {this.props.resp.tracknumber}</li>
-            <li> {this.props.resp.releasedate.slice(0, 16)}</li>
             <li> {this.props.resp.genre}</li>
+
+            <li> {this.props.resp.releasedate}</li>
           </ul>
         </section>
       </div>

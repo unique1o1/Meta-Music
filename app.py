@@ -1,11 +1,13 @@
-from flask import Flask, request, render_template, jsonify
+from flask import Flask, request, render_template, jsonify, abort
 import multiprocessing
 from multiprocessing import Pool
 import time
 import os
 import numpy as np
-import random
 
+import string
+import glob
+import random
 from model import db, fetcher_database
 import random
 import os
@@ -13,10 +15,14 @@ from fetcher import process_init
 app = Flask(__name__, static_folder="./static/dist",
             template_folder="./static")
 
+database_name = ''.join(random.choices(
+    string.ascii_uppercase, k=10))
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:0@localhost:5432/metamusic'
 db_path = os.getcwd()
+for i in glob.glob(os.path.join(db_path, '*.db')):
+    os.remove(i)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + \
-    db_path + '/metamusic.db'
+    db_path + '/' + database_name + '.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = "thisisyunik"
 db.init_app(app)
@@ -54,6 +60,8 @@ def fetch(no):
     while return_data is None:
         time.sleep(0.01)
         return_data = fetcher_database.query.filter_by(uid=no).first()
+    if not return_data.status:
+        return abort(404)
     return jsonify(trackname=return_data.trackname, tracknumber=return_data.tracknumber, albumname=return_data.albumname, image_url=return_data.image_url, releasedate=return_data.releasedate,
                    genre=return_data.genre, artistname=return_data.artistname, uid=return_data.uid, loading=True)
 
@@ -66,4 +74,4 @@ def f(n):
 
 
 if __name__ == "__main__":
-    app.run(debug=True, threaded=True)
+    app.run(threaded=True)

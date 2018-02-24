@@ -17,3 +17,5 @@ class fetcher_database(db.Model):
 
     releasedate = db.Column('releasedate', db.Integer)
     genre = db.Column('genre', db.String(50))
+
+    status = db.Column('status', db.Boolean())

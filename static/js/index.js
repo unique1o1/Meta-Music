@@ -12,48 +12,26 @@ console.log(myworker);
 
 myworker.postMessage(songs);
 
-console.log("called");
-
 myworker.onmessage = function(Data) {
+  const song_count = document.getElementById("totalsongs").value;
   const id = "id" + Data.data.uid; //or some such identifier
   const d = document.createElement("div");
   d.className = "col-sm-3";
   d.id = id;
+  d.className = "fadein_slowly";
   theclass.appendChild(d);
 
   console.log(Data.data.uid);
-
+  console.log("songcount");
   ReactDOM.render(
     <App songno={Data.data.uid} data={Data.data} />,
     document.getElementById(id)
   );
+
+  ReactDOM.render(
+    <span style={{ fontSize: 15 }}>
+      {Data.data.uid + 1} of <b>{song_count}</b>
+    </span>,
+    document.getElementById("index_count")
+  );
 };
-
-//************************************************ */
-
-// var theclass = document.getElementsByClassName("card-deck")[0];
-// (async function renderDOM() {
-//   for (let i = 0; i <= document.getElementById("totalsongs").value; i++) {
-//     const id = "id" + i; //or some such identifier
-//     const d = document.createElement("div");
-//     d.className = "col-sm-3";
-//     d.id = id;
-//     theclass.appendChild(d);
-
-//     // jQuery.ajax({
-//     //   url: "127.0.0.1:5000/fetch/0",
-//     //   success: function(s) {
-//     //     alert(s.trackname);
-//     //   },
-//     //   async: false
-//     // });
-//     fetch("http://127.0.0.1:5000/fetch/0")
-//       .then(response => response.json())
-//       .then(Data => {
-//         console.log("asdf");
-//       });
-//     console.log("ssss");
-
-//     await ReactDOM.render(<App songno={i} />, document.getElementById(id));
-//   }
-// })();
