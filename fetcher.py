@@ -4,6 +4,7 @@ from model import fetcher_database
 import eyed3
 import asyncio
 from bs4 import BeautifulSoup
+import re
 import threading
 import time
 import glob
@@ -71,11 +72,21 @@ def process_init(path, app, db):
 
             for i in files:
                 if i != os.path.basename(path) and isFile:
-                    print('asdfasdfasdf')
 
                     continue
 
                 if i.endswith('.mp3'):
+                    try:
+                        bool_found = re.search(r'.*\d.*\d ', i)
+                        if bool_found:
+                            temp = i[bool_found.end():].strip()
+                            os.rename(os.path.join(root, i),
+                                      os.path.join(root, temp))
+                            print(
+                                "{} renamed to {}".format(i, temp))
+                            i = temp
+                    except:
+                        pass
 
                     loop = asyncio.new_event_loop()
                     asyncio.set_event_loop(loop)
