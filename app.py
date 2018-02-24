@@ -8,11 +8,15 @@ import random
 
 from model import db, fetcher_database
 import random
+import os
 from fetcher import process_init
 app = Flask(__name__, static_folder="./static/dist",
             template_folder="./static")
-
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:0@localhost:5432/metamusic'
+open('meta-music.db', 'a').close()
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:0@localhost:5432/metamusic'
+db_path = os.getcwd()
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + \
+    db_path + '/metamusic.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = "thisisyunik"
 db.init_app(app)
@@ -47,9 +51,9 @@ def process():
 def fetch(no):
     return_data = fetcher_database.query.filter_by(uid=no).first()
 
-    if return_data is None:
-        return 0
-    time.sleep(2)
+    while return_data is None:
+        time.sleep(0.01)
+        return_data = fetcher_database.query.filter_by(uid=no).first()
     return jsonify(trackname=return_data.trackname, tracknumber=return_data.tracknumber, albumname=return_data.albumname, image_url=return_data.image_url, releasedate=return_data.releasedate,
                    genre=return_data.genre, artistname=return_data.artistname, uid=return_data.uid, loading=True)
 
