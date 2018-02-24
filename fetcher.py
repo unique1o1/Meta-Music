@@ -6,6 +6,7 @@ import asyncio
 from bs4 import BeautifulSoup
 import threading
 import time
+import glob
 data = {}
 
 
@@ -29,9 +30,14 @@ async def main(song_name):
     return [response1, response2]
 
 
-def sync_data(data, image_url, lyrics_url, root, i):
-    song_path = os.path.join(root, i)
+def sync_data(image_url, lyrics_url, root, i):
 
+    page = requests.get(lyrics_url)
+
+    html = BeautifulSoup(page.text, "html.parser")
+    lyrics_ = html.find("div", class_="lyrics").get_text()
+
+    song_path = os.path.join(root, i)
     audiofile = eyed3.load(song_path)
     eyed3.log.setLevel("ERROR")
     audiofile.tag.artist = data["artistName"]
@@ -43,20 +49,29 @@ def sync_data(data, image_url, lyrics_url, root, i):
 
     audiofile.tag.genre = data["primaryGenreName"]
     img = requests.get(image_url).content
+
     audiofile.tag.images.set(3, img, "image/jpeg")
-    lyrics = genius_lyrics(lyrics_url)
-    audiofile.tag.lyrics.set(lyrics)
+
+    audiofile.tag.lyrics.set(lyrics_)
     audiofile.tag.save()
 
 
 def process_init(path, app, db):
-
     song_no = 0
+    isFile = False
+    if os.path.isfile(path):
+        isFile = True
     with app.app_context():
         db.create_all()
+        print(os.path.dirname(path))
+        for root, dirs, files in os.walk(os.path.dirname(path) if isFile else path):
 
-        for root, dirs, files in os.walk(path):
             for i in files:
+                if i != os.path.basename(path) and isFile:
+                    print('asdfasdfasdf')
+
+                    continue
+
                 if i.endswith('.mp3'):
 
                     loop = asyncio.new_event_loop()
@@ -86,17 +101,14 @@ def process_init(path, app, db):
                         db.session.commit()
                         print("Already in database")
                         continue
-
                     song_no += 1
                     t = threading.Thread(target=sync_data, args=(
-                        data, image_url, lyrics_url, root, i))
+                        image_url, lyrics_url, root, i))
                     t.daemon = True
                     t.start()
+            time.sleep(3)
+            if isFile:
+                break
         time.sleep(1)
-
-
-def genius_lyrics(url):
-    page = requests.get('https://genius.com/Oasis-live-forever-lyrics')
-    html = BeautifulSoup(page.text, "html.parser")
-    lyrics = html.find("div", class_="lyrics").get_text()
-    return lyrics
+        db.session.query(fetcher_database).delete()
+        db.session.commit()

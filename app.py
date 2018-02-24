@@ -39,13 +39,17 @@ def process():
 
     path = request.args['path']
     total_songs = 0
-    p = Pool()
-    for root, dirs, files in os.walk(path):
 
-        results = p.map(f, files)
-        total_songs += np.sum(np.array(results) > 0)
-    p.close()
-    p.join()
+    if not os.path.isfile(path):
+        p = Pool()
+        for root, dirs, files in os.walk(path):
+
+            results = p.map(f, files)
+            total_songs += np.sum(np.array(results) > 0)
+        p.close()
+        p.join()
+    else:
+        total_songs = 1
     t = multiprocessing.Process(target=process_init, args=(path, app, db))
     # t.daemon = True
     t.start()
@@ -74,4 +78,4 @@ def f(n):
 
 
 if __name__ == "__main__":
-    app.run(threaded=True)
+    app.run(threaded=True, debug=True)
