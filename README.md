@@ -11,6 +11,5 @@ installation for you guys:
         python app.py
         npm run watch
  
- Do install postgres sql and create database named metamusic and table named fetcher
- 
+
         
