@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup
 import threading
 import time
 import glob
+from mutagen.id3 import ID3, TYER
 data = {}
 
 
@@ -32,12 +33,14 @@ async def main(song_name):
 
 def sync_data(image_url, lyrics_url, root, i):
 
+    song_path = os.path.join(root, i)
     page = requests.get(lyrics_url)
 
     html = BeautifulSoup(page.text, "html.parser")
     lyrics_ = html.find("div", class_="lyrics").get_text()
-
-    song_path = os.path.join(root, i)
+    tags = ID3()
+    tags['TYER'] = TYER(encoding=3, text=data["releaseDate"][0:4])  # year
+    tags.save(song_path)
     audiofile = eyed3.load(song_path)
     eyed3.log.setLevel("ERROR")
     audiofile.tag.artist = data["artistName"]
