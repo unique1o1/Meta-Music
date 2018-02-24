@@ -12,7 +12,7 @@ import os
 from fetcher import process_init
 app = Flask(__name__, static_folder="./static/dist",
             template_folder="./static")
-open('meta-music.db', 'a').close()
+
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:0@localhost:5432/metamusic'
 db_path = os.getcwd()
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + \
