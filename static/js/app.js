@@ -18,16 +18,16 @@ export default class App extends React.Component {
   //   return false;
   // }
 
-  componentDidMount() {
-    fetch("http://127.0.0.1:5000/fetch/" + this.props.songno)
-      .then(response => response.json())
-      .then(Data => {
-        this.setState({ data: Data, loading: false });
-      });
-  }
+  // componentDidMount() {
+  //   fetch("http://127.0.0.1:5000/fetch/" + this.props.songno)
+  //     .then(response => response.json())
+  //     .then(Data => {
+  //       this.setState({ data: Data, loading: false });
+  //     });
+  // }
 
   render() {
-    return this.state.loading ? null : (
+    return (
       <div>
         <div
           className="skill-card"
@@ -35,8 +35,8 @@ export default class App extends React.Component {
             lineHeight: 1.1
           }}
         >
-          {console.log(this.state.data.uid)}
-          <Card resp={this.state.data} />
+          {/* {console.log(this.props.data)} */}
+          <Card resp={this.props.data} />
         </div>
         <br />
       </div>

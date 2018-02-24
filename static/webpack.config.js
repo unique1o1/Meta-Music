@@ -2,6 +2,7 @@ const webpack = require("webpack");
 
 const config = {
   entry: __dirname + "/js/index.js",
+
   output: {
     path: __dirname + "/dist",
     filename: "bundle.js"
@@ -12,7 +13,7 @@ const config = {
   module: {
     rules: [
       {
-        test: /\.jsx?/,
+        test: /\.js?/,
         exclude: /node_modules/,
         use: "babel-loader"
       }
