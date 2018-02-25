@@ -10,6 +10,8 @@ this.onmessage = function(songs) {
     if (request.status === 200) {
       // console.log(JSON.parse(request.responseText));
       this.postMessage(JSON.parse(request.responseText));
+    } else {
+      console.log("no data for" + i);
     }
   }
 };
