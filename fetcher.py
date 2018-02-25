@@ -10,34 +10,47 @@ import time
 import glob
 from mutagen.id3 import ID3, TYER
 data = {}
+lyrics_bool = False
+
+base_url = "http://api.genius.com"
+url = 'https://itunes.apple.com/search'
+headers = {
+    'Authorization': 'Bearer dp7sB4-Li2skNwHMdBuXz2yQYKm2moTTW7aVLI1yLBxVnB479rf3HFDJbB9hoDe0'}
+search_url = base_url + "/search"
 
 
 async def main(song_name):
-    base_url = "http://api.genius.com"
-    url = 'https://itunes.apple.com/search'
-    headers = {
-        'Authorization': 'Bearer dp7sB4-Li2skNwHMdBuXz2yQYKm2moTTW7aVLI1yLBxVnB479rf3HFDJbB9hoDe0'}
-    search_url = base_url + "/search"
+    global base_url, url, headers, search_url
     data = {'q': song_name}
 
     loop = asyncio.get_event_loop()
+    try:
+        itunes = loop.run_in_executor(None, lambda: requests.get(url, params={
+            "term": song_name, "media": "music", "entity": "song", "limit": 1}).json())
 
-    itunes = loop.run_in_executor(None, lambda: requests.get(url, params={
-        "term": song_name, "media": "music", "entity": "song", "limit": 1}).json())
+        genius = loop.run_in_executor(None, lambda: requests.get(
+            search_url, params=data, headers=headers).json())
+        response1 = await itunes
+        response2 = await genius
+    except Exception:
+        print("Error occured when fetching data from servers")
 
-    genius = loop.run_in_executor(None, lambda: requests.get(
-        search_url, params=data, headers=headers).json())
-    response1 = await itunes
-    response2 = await genius
     return [response1, response2]
 
 
 def sync_data(image_url, lyrics_url, song_path):
+    global lyrics_bool, base_url, url, headers, search_url
+    if lyrics_bool:  # if itunes and genius dont match the song and artist
+        data_ = {'q': data['trackName'] + ' ' + data['artistName']}
+        genius = requests.get(search_url, params=data_, headers=headers).json()
 
+        lyrics_url = genius["response"]["hits"][0]["result"]['url']
+        print('inside lyricsssdfasdgd')
     page = requests.get(lyrics_url)
 
     html = BeautifulSoup(page.text, "html.parser")
     lyrics_ = html.find("div", class_="lyrics").get_text()
+    print(lyrics_)
     tags = ID3()
     tags['TYER'] = TYER(encoding=3, text=data["releaseDate"][0:4])  # year
     tags.save(song_path)
@@ -85,20 +98,28 @@ def process_init(path, app, db):
                     i = re.sub(r'^[0-9]+[ _\-][0-9]*', '', i)
                     i = re.sub(r' \d{2,}', '', i)
                     i = re.sub(r'[^\x00-\x7F]+', '', i).strip()
-
-                    os.rename(os.path.join(root, temp),
-                              os.path.join(root, i + ext))
-                    print("{} renamed to {}{}".format(
-                        temp, i, ext))
+                    if i != temp:
+                        os.rename(os.path.join(root, temp),
+                                  os.path.join(root, i + ext))
+                        print("{} renamed to {}{}".format(
+                            temp, i, ext))
 
                     loop = asyncio.new_event_loop()
                     asyncio.set_event_loop(loop)
                     datas = loop.run_until_complete(main(i))
                     try:
-                        global data
+                        global data, lyrics_bool
+
                         data = datas[0]['results'][0]
                         genius_data = datas[1]["response"]["hits"][0]["result"]
-                        image_url = genius_data['song_art_image_thumbnail_url']
+                        if data['artistName'].lower().strip() == genius_data['primary_artist']['name'].lower().strip():
+
+                            image_url = genius_data['song_art_image_thumbnail_url']
+                            lyrics_bool = False
+                        else:
+                            image_url = data['artworkUrl100']
+                            lyrics_bool = True
+
                     except IndexError:
                         print("Data related to {} was not found".format(i))
                         fetched_data = fetcher_database(
@@ -117,7 +138,7 @@ def process_init(path, app, db):
                         db.session.commit()
                         total_managed += 1
                     except Exception:
- 
+
                         print("Already in database")
                         song_no += 1
                         continue
