@@ -75,7 +75,7 @@ def process_init(path, app, db):
 
                     continue
                 ext = os.path.splitext(i)[1]
-                if i.endswith('.mp3') or i.endswith('.m4a') or i.endswith('.flac'):
+                if i.endswith('.mp3'):
 
                     temp = i
 
