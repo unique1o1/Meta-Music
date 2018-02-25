@@ -10,6 +10,7 @@ installation for you guys:
         pip install -r requirements
         python app.py
         npm run watch
- 
 
+**Note for MacOS users**: If you experience problems with fork in macOS, put `OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES` in your environment variable to fix the issue. This is an issue with macOS 10.13 where Apple changed the way fork() works on the OS which is incompatible with Python fork().
+ 
         
