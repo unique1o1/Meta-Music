@@ -76,22 +76,20 @@ def process_init(path, app, db):
                     continue
                 ext = os.path.splitext(i)[1]
                 if i.endswith('.mp3') or i.endswith('.m4a') or i.endswith('.flac'):
-                    try:
-                        temp = i
 
-                        i = re.sub(re.escape(ext), '', i)
-                        i = re.sub(r'[^\w^,]', ' ', i)
-                        i = re.sub(r'[_]', ' ', i)
-                        i = re.sub(r'^[0-9]+[ _\-][0-9]*', '', i)
-                        i = re.sub(r' \d{2,}', '', i)
-                        i = re.sub(r'[^\x00-\x7F]+', '', i).strip()
+                    temp = i
 
-                        os.rename(os.path.join(root, temp),
-                                  os.path.join(root, i + ext))
-                        print("{} renamed to {}{}".format(
-                            temp, i, ext))
-                    except:
-                        pass
+                    i = re.sub(re.escape(ext), '', i)
+                    i = re.sub(r'[^\w^,]', ' ', i)
+                    i = re.sub(r'[_]', ' ', i)
+                    i = re.sub(r'^[0-9]+[ _\-][0-9]*', '', i)
+                    i = re.sub(r' \d{2,}', '', i)
+                    i = re.sub(r'[^\x00-\x7F]+', '', i).strip()
+
+                    os.rename(os.path.join(root, temp),
+                              os.path.join(root, i + ext))
+                    print("{} renamed to {}{}".format(
+                        temp, i, ext))
 
                     loop = asyncio.new_event_loop()
                     asyncio.set_event_loop(loop)
@@ -119,10 +117,7 @@ def process_init(path, app, db):
                         db.session.commit()
                         total_managed += 1
                     except Exception:
-                        fetched_data = fetcher_database(
-                            uid=song_no, status=False)
-                        db.session.add(fetched_data)
-                        db.session.commit()
+ 
                         print("Already in database")
                         song_no += 1
                         continue

@@ -1,5 +1,3 @@
-console.log("asdfasdfasdfasdf");
-
 this.onmessage = function(songs) {
   for (var i = 0; i < songs.data; i++) {
     var request = new XMLHttpRequest();
@@ -11,7 +9,7 @@ this.onmessage = function(songs) {
       // console.log(JSON.parse(request.responseText));
       this.postMessage(JSON.parse(request.responseText));
     } else {
-      console.log("no data for" + i);
+      console.log("no data for " + i);
     }
   }
 };
