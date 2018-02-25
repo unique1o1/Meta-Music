@@ -32,9 +32,8 @@ async def main(song_name):
     return [response1, response2]
 
 
-def sync_data(image_url, lyrics_url, root, i):
+def sync_data(image_url, lyrics_url, song_path):
 
-    song_path = os.path.join(root, i)
     page = requests.get(lyrics_url)
 
     html = BeautifulSoup(page.text, "html.parser")
@@ -62,6 +61,7 @@ def sync_data(image_url, lyrics_url, root, i):
 
 def process_init(path, app, db):
     song_no = 0
+    total_managed = 0
     isFile = False
     if os.path.isfile(path):
         isFile = True
@@ -74,24 +74,28 @@ def process_init(path, app, db):
                 if i != os.path.basename(path) and isFile:
 
                     continue
-
-                if i.endswith('.mp3'):
+                ext = os.path.splitext(i)[1]
+                if i.endswith('.mp3') or i.endswith('.m4a') or i.endswith('.flac'):
                     try:
-                        bool_found = re.search(r'.*\d.*\d ', i)
-                        if bool_found:
-                            temp = i[bool_found.end():].strip()
-                            os.rename(os.path.join(root, i),
-                                      os.path.join(root, temp))
-                            print(
-                                "{} renamed to {}".format(i, temp))
-                            i = temp
+                        temp = i
+
+                        i = re.sub(re.escape(ext), '', i)
+                        i = re.sub(r'[^\w^,]', ' ', i)
+                        i = re.sub(r'[_]', ' ', i)
+                        i = re.sub(r'^[0-9]+[ _\-][0-9]*', '', i)
+                        i = re.sub(r' \d{2,}', '', i)
+                        i = re.sub(r'[^\x00-\x7F]+', '', i).strip()
+
+                        os.rename(os.path.join(root, temp),
+                                  os.path.join(root, i + ext))
+                        print("{} renamed to {}{}".format(
+                            temp, i, ext))
                     except:
                         pass
 
                     loop = asyncio.new_event_loop()
                     asyncio.set_event_loop(loop)
-                    datas = loop.run_until_complete(main(os.path.splitext(
-                        i)[0]))
+                    datas = loop.run_until_complete(main(i))
                     try:
                         global data
                         data = datas[0]['results'][0]
@@ -99,6 +103,11 @@ def process_init(path, app, db):
                         image_url = genius_data['song_art_image_thumbnail_url']
                     except IndexError:
                         print("Data related to {} was not found".format(i))
+                        fetched_data = fetcher_database(
+                            uid=song_no, status=False)
+                        db.session.add(fetched_data)
+                        db.session.commit()
+                        song_no += 1
                         continue
                     lyrics_url = genius_data['url']
                     releasedate = data["releaseDate"][0:4]
@@ -108,16 +117,18 @@ def process_init(path, app, db):
                             trackname=data["trackName"], uid=song_no, tracknumber=data["trackNumber"], image_url=image_url, artistname=data["artistName"], albumname=data["collectionName"], releasedate=releasedate, genre=data["primaryGenreName"], status=True)
                         db.session.add(fetched_data)
                         db.session.commit()
+                        total_managed += 1
                     except Exception:
                         fetched_data = fetcher_database(
                             uid=song_no, status=False)
                         db.session.add(fetched_data)
                         db.session.commit()
                         print("Already in database")
+                        song_no += 1
                         continue
                     song_no += 1
                     t = threading.Thread(target=sync_data, args=(
-                        image_url, lyrics_url, root, i))
+                        image_url, lyrics_url, os.path.join(root, i + ext)))
                     t.daemon = True
                     t.start()
             time.sleep(3)
@@ -126,3 +137,4 @@ def process_init(path, app, db):
         time.sleep(1)
         db.session.query(fetcher_database).delete()
         db.session.commit()
+        print("{} out of {} songs were managed".format(total_managed, song_no))
