@@ -1,3 +1,5 @@
+console.log("aaaaa");
+
 this.onmessage = function(songs) {
   for (var i = 0; i < songs.data; i++) {
     var request = new XMLHttpRequest();

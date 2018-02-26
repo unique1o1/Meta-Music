@@ -1,77 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "layout.html" %} {% block content %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+<form action="/process" method="get">
+    <input class="input is-rounded inputHeight" type="text" placeholder="Enter path to your Music directory/ song" name="path"
+        width="150px">
 
-    <link rel="stylesheet" href="dist/css/main.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.css">
+    <br>
+    <br>
 
-</head>
-
-<body>
+    <br>
+    <br>
 
 
-
-    <section class="section">
-        <div class="container">
-
-            <h1 style="font-size:30px;">
-                <span id="metamusic">Meta</span> Music</h1>
+    <input type="submit" value="Process" class="button is-primary" id="anim" style="font-size:25px; border-radius:20px;">
+</form>
 
 
+{% endblock content %} {% block button %}
+<div id="vis" class="fadein_slowly">
 
-            <br>
+</div>{% endblock button %} {% block script %}
+<script>
+    document.getElementById('anim').onclick = function () {
 
+        elem = document.getElementById('vis');
 
-            <form action="/process" method="get">
-                <input class="input is-rounded" type="text" placeholder="Enter path to your Music directory/ song" name="path" width="150px">
+        elem.style.visibility = "visible";
 
-                <br>
-                <br>
+        elem.style.top = "0";
+        elem.style.left = "0";
+        elem.style.width = "100%";
 
-                <input type="submit" value="Process" class="button is-primary" id="ind" style="font-size:20px;">
-            </form>
+        elem.style.height = "100%";
+        elem.style.borderRadius = "0px";
 
-
-
-        </div>
-    </section>
-
-
-    <!--
-
-    <script>
-        //directoryc codes
-        function changemode() {
-            var checkbox = document.getElementById("folder")
-            if (checkbox.checked) {
-                document.getElementById("filepicker").setAttribute('webkitdirectory', "");
-
-            }
-            else {
-                document.getElementById("filepicker").removeAttribute("webkitdirectory");
-
-            }
-        }
-        document.getElementById("filepicker").addEventListener("change", function (event) {
-            let output = document.getElementById("listing");
-            let files = document.getElementById("filepicker").files;
-            console.log(files);
-
-            for (let i = 0; i < files.length; i++) {
-                let item = document.createElement("li");
-                item.innerHTML = files[i].name;
-                //console.log(files[i]);
-                output.appendChild(item);
-            };
-        }, false);
-    </script>
--->
-
-</body>
-
-</html>
+    }
+</script> {% endblock script %}

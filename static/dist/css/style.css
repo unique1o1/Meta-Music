@@ -144,6 +144,78 @@ html {
 }
 
 
+
+#vis {
+  position: fixed;
+  top: 0%;
+  left: 0%;
+  width: 100%;
+  height: 100%;
+  background: #00d1b2;
+  border-radius: 0px;
+
+  transition: visibility 0s 3s, opacity 3s ;
+}
+
+
+
+
+.fadeout_slowly {
+  
+  animation: fadeout 1s;
+  -moz-animation: fadeout 1s; /* Firefox */
+  -webkit-animation: fadeout 1s; /* Safari and Chrome */
+  -o-animation: fadeout 1s; /* Opera */
+}
+@keyframes fadeout {
+  from {
+      opacity:1;
+  }
+  to {
+      opacity:0;
+  }
+}
+@-moz-keyframes fadeout { /* Firefox */
+  from {
+      opacity:1;
+  }
+  to {
+      opacity:0;
+  }
+}
+@-webkit-keyframes fadeout { /* Safari and Chrome */
+  from {
+      opacity:1;
+  }
+  to {
+      opacity:0;
+  }
+}
+@-o-keyframes fadeout { /* Opera */
+  from {
+      opacity:1;
+  }
+  to {
+      opacity:0;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 .fadein_slowly {
   
   animation: fadein 2s;

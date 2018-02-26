@@ -38,6 +38,9 @@ def index():
 def process():
 
     path = request.args['path']
+    if not os.path.exists(path):
+        time.sleep(.3)
+        return render_template("nofile.html")
     total_songs = 0
 
     if not os.path.isfile(path):
@@ -53,7 +56,7 @@ def process():
     t = multiprocessing.Process(target=process_init, args=(path, app, db))
     # t.daemon = True
     t.start()
-    time.sleep(0.5)
+    time.sleep(0.3)
     return render_template("process.html", totalsongs=total_songs)
 
 
