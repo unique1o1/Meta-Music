@@ -2,7 +2,6 @@ import os
 import requests
 from model import fetcher_database
 import eyed3
-import asyncio
 from bs4 import BeautifulSoup
 import re
 import threading
@@ -19,23 +18,19 @@ headers = {
 search_url = base_url + "/search"
 
 
-async def main(song_name):
+def main(song_name):
     global base_url, url, headers, search_url
     data = {'q': song_name}
-
-    loop = asyncio.get_event_loop()
     try:
-        itunes = loop.run_in_executor(None, lambda: requests.get(url, params={
-            "term": song_name, "media": "music", "entity": "song", "limit": 1}).json())
+        itunes = requests.get(url, params={
+            "term": song_name, "media": "music", "entity": "song", "limit": 1}).json()
 
-        genius = loop.run_in_executor(None, lambda: requests.get(
-            search_url, params=data, headers=headers).json())
-        response1 = await itunes
-        response2 = await genius
+        genius = requests.get(search_url, params=data, headers=headers).json()
+
     except Exception:
         print("Error occured when fetching data from servers")
 
-    return [response1, response2]
+    return [itunes, genius]
 
 
 def sync_data(image_url, lyrics_url, song_path):
@@ -76,6 +71,7 @@ def process_init(path, app, db):
     song_no = 0
     total_managed = 0
     isFile = False
+    timeit=time.time()
     if os.path.isfile(path):
         isFile = True
     with app.app_context():
@@ -103,10 +99,7 @@ def process_init(path, app, db):
                                   os.path.join(root, i + ext))
                         print("{} renamed to {}{}".format(
                             temp, i, ext))
-
-                    loop = asyncio.new_event_loop()
-                    asyncio.set_event_loop(loop)
-                    datas = loop.run_until_complete(main(i))
+                    datas = main(i)
                     try:
                         global data, lyrics_bool
 
@@ -154,3 +147,4 @@ def process_init(path, app, db):
         db.session.query(fetcher_database).delete()
         db.session.commit()
         print("{} out of {} songs were managed".format(total_managed, song_no))
+        print(time.time()-timeit)
