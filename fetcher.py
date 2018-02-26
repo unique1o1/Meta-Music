@@ -4,7 +4,7 @@ from model import fetcher_database
 import eyed3
 from bs4 import BeautifulSoup
 import re
-import threading
+# import threading
 import time
 import glob
 from mutagen.id3 import ID3, TYER
@@ -36,16 +36,21 @@ def main(song_name):
 def sync_data(image_url, lyrics_url, song_path):
     global lyrics_bool, base_url, url, headers, search_url
     if lyrics_bool:  # if itunes and genius dont match the song and artist
-        data_ = {'q': data['trackName'] + ' ' + data['artistName']}
-        genius = requests.get(search_url, params=data_, headers=headers).json()
+        try:
+            data_ = {'q': data['trackName'] + ' ' + data['artistName']}
+            print(data['trackName'] + ' ' + data['artistName'])
+            genius = requests.get(search_url, params=data_,
+                                  headers=headers).json()
 
-        lyrics_url = genius["response"]["hits"][0]["result"]['url']
-        print('inside lyricsssdfasdgd')
+            lyrics_url = genius["response"]["hits"][0]["result"]['url']
+            print('inside lyricsssdfasdgd')
+        except IndexError:
+            print("indexerror")
     page = requests.get(lyrics_url)
 
     html = BeautifulSoup(page.text, "html.parser")
     lyrics_ = html.find("div", class_="lyrics").get_text()
-    print(lyrics_)
+
     tags = ID3()
     tags['TYER'] = TYER(encoding=3, text=data["releaseDate"][0:4])  # year
     tags.save(song_path)
@@ -71,7 +76,7 @@ def process_init(path, app, db):
     song_no = 0
     total_managed = 0
     isFile = False
-    timeit=time.time()
+    timeit = time.time()
     if os.path.isfile(path):
         isFile = True
     with app.app_context():
@@ -136,10 +141,9 @@ def process_init(path, app, db):
                         song_no += 1
                         continue
                     song_no += 1
-                    t = threading.Thread(target=sync_data, args=(
-                        image_url, lyrics_url, os.path.join(root, i + ext)))
-                    t.daemon = True
-                    t.start()
+                    sync_data(image_url, lyrics_url,
+                              os.path.join(root, i + ext))
+
             time.sleep(3)
             if isFile:
                 break
@@ -147,4 +151,4 @@ def process_init(path, app, db):
         db.session.query(fetcher_database).delete()
         db.session.commit()
         print("{} out of {} songs were managed".format(total_managed, song_no))
-        print(time.time()-timeit)
+        print(time.time() - timeit)
