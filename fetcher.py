@@ -42,6 +42,7 @@ def sync_data(image_url, lyrics_url, song_path):
     global lyrics_bool, base_url, url, headers, search_url
     if lyrics_bool:  # if itunes and genius dont match the song and artist
         data_ = {'q': data['trackName'] + ' ' + data['artistName']}
+        print(data['trackName'] + ' ' + data['artistName'])
         genius = requests.get(search_url, params=data_, headers=headers).json()
 
         lyrics_url = genius["response"]["hits"][0]["result"]['url']
@@ -76,6 +77,7 @@ def process_init(path, app, db):
     song_no = 0
     total_managed = 0
     isFile = False
+    timeit = time.time()
     if os.path.isfile(path):
         isFile = True
     with app.app_context():
@@ -154,3 +156,4 @@ def process_init(path, app, db):
         db.session.query(fetcher_database).delete()
         db.session.commit()
         print("{} out of {} songs were managed".format(total_managed, song_no))
+        print(time.time() - timeit)
