@@ -41,12 +41,16 @@ async def main(song_name):
 def sync_data(image_url, lyrics_url, song_path):
     global lyrics_bool, base_url, url, headers, search_url
     if lyrics_bool:  # if itunes and genius dont match the song and artist
-        data_ = {'q': data['trackName'] + ' ' + data['artistName']}
-        print(data['trackName'] + ' ' + data['artistName'])
-        genius = requests.get(search_url, params=data_, headers=headers).json()
+        try:
+            data_ = {'q': data['trackName'] + ' ' + data['artistName']}
+            print(data['trackName'] + ' ' + data['artistName'])
+            genius = requests.get(search_url, params=data_,
+                                  headers=headers).json()
 
-        lyrics_url = genius["response"]["hits"][0]["result"]['url']
-        print('inside lyricsssdfasdgd')
+            lyrics_url = genius["response"]["hits"][0]["result"]['url']
+            print('inside lyricsssdfasdgd')
+        except IndexError:
+            print("indexerror")
     page = requests.get(lyrics_url)
 
     html = BeautifulSoup(page.text, "html.parser")
