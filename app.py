@@ -45,18 +45,27 @@ def process():
 
     if not os.path.isfile(path):
         p = Pool()
+        folders = []
         for root, dirs, files in os.walk(path):
 
             results = p.map(f, files)
-            total_songs += np.sum(np.array(results) > 0)
+            numbers = np.sum(np.array(results) > 0)
+            if numbers:
+                folders.append(root)
+            total_songs += numbers
         p.close()
         p.join()
+
+        t = multiprocessing.Process(
+            target=process_init, args=(path, app, db, folders))
     else:
         total_songs = 1
-    t = multiprocessing.Process(target=process_init, args=(path, app, db))
+        folders = [os.path.dirname(path)]
+        t = multiprocessing.Process(
+            target=process_init, args=(path, app, db, folders))
     # t.daemon = True
     t.start()
-    time.sleep(0.3)
+    time.sleep(0.4)
     return render_template("process.html", totalsongs=total_songs)
 
 
@@ -85,4 +94,4 @@ webbrowser.open('http://127.0.0.1:5000/')
 
 if __name__ == "__main__":
 
-    app.run(debug=True)
+    app.run(debug=True, threaded=True)

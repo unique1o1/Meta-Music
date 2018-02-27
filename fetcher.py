@@ -48,14 +48,14 @@ def sync_data(image_url, lyrics_url, song_path):
                                   headers=headers).json()
 
             lyrics_url = genius["response"]["hits"][0]["result"]['url']
-            print('inside lyricsssdfasdgd')
+            print('inside')
         except IndexError:
             print("indexerror")
     page = requests.get(lyrics_url)
 
     html = BeautifulSoup(page.text, "html.parser")
     lyrics_ = html.find("div", class_="lyrics").get_text()
-    print(lyrics_)
+
     tags = ID3()
     tags['TYER'] = TYER(encoding=3, text=data["releaseDate"][0:4])  # year
     tags.save(song_path)
@@ -77,7 +77,7 @@ def sync_data(image_url, lyrics_url, song_path):
     audiofile.tag.save()
 
 
-def process_init(path, app, db):
+def process_init(path, app, db, folders):
     song_no = 0
     total_managed = 0
     isFile = False
@@ -87,9 +87,10 @@ def process_init(path, app, db):
     with app.app_context():
         db.create_all()
         print(os.path.dirname(path))
-        for root, dirs, files in os.walk(os.path.dirname(path) if isFile else path):
+        for root in folders:
 
-            for i in files:
+            for i in os.listdir(root):
+
                 if i != os.path.basename(path) and isFile:
 
                     continue
@@ -99,6 +100,7 @@ def process_init(path, app, db):
                     temp = i
 
                     i = re.sub(re.escape(ext), '', i)
+                    temp = i
                     i = re.sub(r'[^\w^,]', ' ', i)
                     i = re.sub(r'[_]', ' ', i)
                     i = re.sub(r'^[0-9]+[ _\-][0-9]*', '', i)
@@ -107,7 +109,7 @@ def process_init(path, app, db):
                     if i != temp:
                         os.rename(os.path.join(root, temp),
                                   os.path.join(root, i + ext))
-                        print("{} renamed to {}{}".format(
+                        print("{0}{2} renamed to {1}{2}".format(
                             temp, i, ext))
 
                     loop = asyncio.new_event_loop()
@@ -153,11 +155,11 @@ def process_init(path, app, db):
                         image_url, lyrics_url, os.path.join(root, i + ext)))
                     t.daemon = True
                     t.start()
-            time.sleep(3)
-            if isFile:
-                break
-        time.sleep(1)
+                    if isFile:
+                        break
+
+        time.sleep(3)
         db.session.query(fetcher_database).delete()
         db.session.commit()
         print("{} out of {} songs were managed".format(total_managed, song_no))
-        print(time.time() - timeit)
+        print((time.time() - timeit) - 3)
