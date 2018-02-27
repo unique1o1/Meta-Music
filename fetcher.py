@@ -107,7 +107,7 @@ def process_init(path, app, db, folders):
                     i = re.sub(r' \d{2,}', '', i)
                     i = re.sub(r'[^\x00-\x7F]+', '', i).strip()
                     if i != temp:
-                        os.rename(os.path.join(root, temp),
+                        os.rename(os.path.join(root, temp+ext),
                                   os.path.join(root, i + ext))
                         print("{0}{2} renamed to {1}{2}".format(
                             temp, i, ext))
