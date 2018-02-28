@@ -162,10 +162,10 @@ html {
 
 .fadeout_slowly {
   
-  animation: fadeout 1s;
-  -moz-animation: fadeout 1s; /* Firefox */
-  -webkit-animation: fadeout 1s; /* Safari and Chrome */
-  -o-animation: fadeout 1s; /* Opera */
+  animation: fadeout 3s;
+  -moz-animation: fadeout 3s; /* Firefox */
+  -webkit-animation: fadeout 3s; /* Safari and Chrome */
+  -o-animation: fadeout 3s; /* Opera */
 }
 @keyframes fadeout {
   from {
