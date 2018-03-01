@@ -63,7 +63,7 @@ def process():
         folders = [os.path.dirname(path)]
         t = multiprocessing.Process(
             target=process_init, args=(path, app, db, folders))
-    # t.daemon = True
+    t.daemon = True
     t.start()
     time.sleep(0.4)
     return render_template("process.html", totalsongs=total_songs)
@@ -88,8 +88,6 @@ def f(n):
     else:
         return 0
 
-
-webbrowser.open('http://127.0.0.1:5000/')
 
 
 if __name__ == "__main__":

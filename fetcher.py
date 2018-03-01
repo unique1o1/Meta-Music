@@ -33,7 +33,7 @@ async def main(song_name):
         response1 = await itunes
         response2 = await genius
     except Exception:
-        
+
         print("Error occured when fetching data from servers")
         return 0
     return [response1, response2]
@@ -101,14 +101,14 @@ def process_init(path, app, db, folders):
                     temp = os.path.splitext(i)[0]
 
                     i = re.sub(re.escape(ext), '', i)
-  
+
                     i = re.sub(r'[^\w^,]', ' ', i)
                     i = re.sub(r'[_]', ' ', i)
                     i = re.sub(r'^[0-9]+[ _\-][0-9]*', '', i)
                     i = re.sub(r' \d{2,}', '', i)
                     i = re.sub(r'[^\x00-\x7F]+', '', i).strip()
                     if i != temp:
-                        os.rename(os.path.join(root, temp+ext),
+                        os.rename(os.path.join(root, temp + ext),
                                   os.path.join(root, i + ext))
                         print("{0}{2} renamed to {1}{2}".format(
                             temp, i, ext))
@@ -116,8 +116,8 @@ def process_init(path, app, db, folders):
                     loop = asyncio.new_event_loop()
                     asyncio.set_event_loop(loop)
                     datas = loop.run_until_complete(main(i))
-                    if datas==0:
-                        song_no+=1
+                    if datas == 0:
+                        song_no += 1
                         continue
                     try:
                         global data, lyrics_bool
