@@ -9,23 +9,6 @@ export default class App extends React.Component {
     };
   }
 
-  // delay(second) {
-  //   return new Promise(resolve => {
-  //     setTimeout(resolve, second * 1000);
-  //   });
-  // }
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   return false;
-  // }
-
-  // componentDidMount() {
-  //   fetch("http://127.0.0.1:5000/fetch/" + this.props.songno)
-  //     .then(response => response.json())
-  //     .then(Data => {
-  //       this.setState({ data: Data, loading: false });
-  //     });
-  // }
-
   render() {
     return (
       <div>
