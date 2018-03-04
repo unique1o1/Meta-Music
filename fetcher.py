@@ -101,7 +101,6 @@ def process_init(path, app, db, folders):
                     temp = os.path.splitext(i)[0]
 
                     i = re.sub(re.escape(ext), '', i)
-
                     i = re.sub(r'[^\w^,]', ' ', i)
                     i = re.sub(r'[_]', ' ', i)
                     i = re.sub(r'^[0-9]+[ _\-][0-9]*', '', i)
