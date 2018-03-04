@@ -17,7 +17,6 @@ app = Flask(__name__, static_folder="./static/dist",
 
 database_name = ''.join(random.choices(
     string.ascii_uppercase, k=10))
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:0@localhost:5432/metamusic'
 db_path = os.getcwd()
 for i in glob.glob(os.path.join(db_path, '*.db')):
     os.remove(i)
@@ -87,7 +86,6 @@ def f(n):
         return 1
     else:
         return 0
-
 
 
 if __name__ == "__main__":
