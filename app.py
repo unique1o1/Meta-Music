@@ -4,7 +4,7 @@ from multiprocessing import Pool
 import time
 import os
 import numpy as np
-import webbrowser
+# import webbrowser
 import string
 import glob
 import random
