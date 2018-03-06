@@ -53,7 +53,6 @@ def sync_data(image_url, lyrics_url, song_path):
         except IndexError:
             print("indexerror")
     page = requests.get(lyrics_url)
-
     html = BeautifulSoup(page.text, "html.parser")
     lyrics_ = html.find("div", class_="lyrics").get_text()
 
@@ -75,7 +74,10 @@ def sync_data(image_url, lyrics_url, song_path):
     audiofile.tag.images.set(3, img, "image/jpeg")
 
     audiofile.tag.lyrics.set(lyrics_)
+
     audiofile.tag.save()
+
+    print(song_path, data["artistName"])
 
 
 def process_init(path, app, db, folders):
@@ -161,7 +163,7 @@ def process_init(path, app, db, folders):
                     if isFile:
                         break
 
-        time.sleep(3)
+        time.sleep(4)
         db.session.query(fetcher_database).delete()
         db.session.commit()
         print("{} out of {} songs were managed".format(total_managed, song_no))
