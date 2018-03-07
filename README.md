@@ -10,6 +10,10 @@ installation for you guys:
         pip install -r requirements
         python app.py
         npm run watch
+# Using PIP
+        sudo pip install MetaMusic
+        sudo npm install -g random-material-color react react-dom
+        meta-music
 
 # Demo
 
