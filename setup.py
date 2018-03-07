@@ -18,21 +18,18 @@ def parse_requirements(requirements):
 REQUIREMENTS = parse_requirements("requirements.txt")
 setuptools.setup(
     name="MetaMusic",
-    version="1.0",
+    version="1.0.3",
     url="https://github.com/unique1o1/Meta-Music",
-
     author="Yunik Maharjan",
     author_email="yunik.maharjan@icloud.com",
     license='MIT',
     description="Metamusic",
     platforms="Linux, MacOS, Windows",
     long_description=open('README.md').read(),
-    zip_safe=False,
-    data_files=[('metamusic/static/dist', os.listdir(os.path.join(os.path.abspath('.'), 'metamusic/static/dist'))), ('.', ['requirements.txt']), ('metamusic/static',
-                                                                                                                                                  ['process.html', 'index.html', 'layout.html', 'nofile.html'])],
-    packages=['metamusic'],
     include_package_data=True,
     install_requires=REQUIREMENTS,
+
+    packages=setuptools.find_packages(),
     classifiers=[
         'Environment :: Console',
         'Programming Language :: Python :: 3.6'
@@ -40,6 +37,6 @@ setuptools.setup(
     # download_url='https://github.com/unique1o1/ROI2TEXT/archive/v1.1.tar.gz',
     entry_points="""
     [console_scripts]
-    metamusic=metamusic.app
+    meta-music=metamusic.app:run
     """,
 )
