@@ -1,6 +1,6 @@
 import os
 import requests
-from model import fetcher_database
+from metamusic.model import fetcher_database
 import eyed3
 import asyncio
 from bs4 import BeautifulSoup

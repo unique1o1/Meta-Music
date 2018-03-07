@@ -8,10 +8,11 @@ import numpy as np
 import string
 import glob
 import random
-from model import db, fetcher_database
+from metamusic.fetcher import process_init
+from metamusic.model import db, fetcher_database
 import random
 import os
-from fetcher import process_init
+
 app = Flask(__name__, static_folder="./static/dist",
             template_folder="./static")
 
@@ -88,6 +89,5 @@ def f(n):
         return 0
 
 
-if __name__ == "__main__":
-
+def run():
     app.run(debug=True, threaded=True)

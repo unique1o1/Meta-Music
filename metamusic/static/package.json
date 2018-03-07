@@ -28,7 +28,6 @@
     ]
   },
   "dependencies": {
-    "random-material-color": "^1.0.3",
-    "request": "^2.83.0"
+    "random-material-color": "^1.0.3"
   }
 }
