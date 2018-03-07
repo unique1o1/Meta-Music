@@ -1,4 +1,5 @@
 import setuptools
+import os
 
 
 def parse_requirements(requirements):
@@ -27,8 +28,8 @@ setuptools.setup(
     platforms="Linux, MacOS, Windows",
     long_description=open('README.md').read(),
     zip_safe=False,
-    data_files=[('./metamusic/static/', ['process.html', 'index.html', 'layout.html', 'nofile.html']),
-                ('metamusic/static/dist', ['*']), ('.', ['requirements.txt'])],
+    data_files=[('metamusic/static/dist', os.listdir(os.path.join(os.path.abspath('.'), 'metamusic/static/dist'))), ('.', ['requirements.txt']), ('metamusic/static',
+                                                                                                                                                  ['process.html', 'index.html', 'layout.html', 'nofile.html'])],
     packages=['metamusic'],
     include_package_data=True,
     install_requires=REQUIREMENTS,
