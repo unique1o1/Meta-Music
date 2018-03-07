@@ -1,5 +1,4 @@
 import setuptools
-import os
 
 
 def parse_requirements(requirements):
@@ -18,7 +17,7 @@ def parse_requirements(requirements):
 REQUIREMENTS = parse_requirements("requirements.txt")
 setuptools.setup(
     name="MetaMusic",
-    version="1.0.3",
+    version="1.0.4",
     url="https://github.com/unique1o1/Meta-Music",
     author="Yunik Maharjan",
     author_email="yunik.maharjan@icloud.com",
@@ -34,7 +33,6 @@ setuptools.setup(
         'Environment :: Console',
         'Programming Language :: Python :: 3.6'
     ],
-    # download_url='https://github.com/unique1o1/ROI2TEXT/archive/v1.1.tar.gz',
     entry_points="""
     [console_scripts]
     meta-music=metamusic.app:run
