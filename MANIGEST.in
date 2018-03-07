@@ -1,0 +1,10 @@
+include metamusic/static/*.html
+include metamusic/static/dist/*
+include requirements.txt
+
+global-exclude *.pyc
+global-exclude *.pyo
+global-exclude .git
+global-exclude .ipynb_checkpoints
+global-exclude .json
+
