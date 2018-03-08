@@ -5,6 +5,7 @@ import time
 import os
 import numpy as np
 import sys
+import urllib
 import webbrowser
 import string
 import glob
@@ -19,7 +20,7 @@ app = Flask(__name__, static_folder="./static/dist",
 
 database_name = ''.join(random.choices(
     string.ascii_uppercase, k=10))
-db_path = os.getcwd()
+db_path = os.path.join(os.getcwd(), '.metamusic')
 for i in glob.glob(os.path.join(db_path, '*.db')):
     os.remove(i)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + \
@@ -92,9 +93,14 @@ def f(n):
 
 def run():
     if len(sys.argv) >= 2:
-
-        folders = [os.path.dirname(sys.argv[1])]
-        process_init(sys.argv[1], app, db, folders)
+        if os.path.isdir(sys.argv[1]):
+            url = 'http://127.0.0.1:5000/process?path=' + \
+                urllib.parse.quote_plus(sys.argv[1])
+            webbrowser.open(url)
+            app.run(threaded=True)
+        else:
+            folders = [os.path.dirname(sys.argv[1])]
+            process_init(sys.argv[1], app, db, folders)
     else:
         webbrowser.open('http://127.0.0.1:5000/')
         app.run(threaded=True)
