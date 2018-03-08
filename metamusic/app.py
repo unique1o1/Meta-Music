@@ -4,6 +4,7 @@ from multiprocessing import Pool
 import time
 import os
 import numpy as np
+import sys
 import webbrowser
 import string
 import glob
@@ -90,6 +91,10 @@ def f(n):
 
 
 def run():
+    if len(sys.argv) >= 2:
 
-    webbrowser.open('http://127.0.0.1:5000/')
-    app.run(debug=True, threaded=True)
+        folders = [os.path.dirname(sys.argv[1])]
+        process_init(sys.argv[1], app, db, folders)
+    else:
+        webbrowser.open('http://127.0.0.1:5000/')
+        app.run(threaded=True)
