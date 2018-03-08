@@ -9,7 +9,7 @@ import threading
 import time
 import glob
 from mutagen.id3 import ID3, TYER
-data = {}
+
 lyrics_bool = False
 
 base_url = "http://api.genius.com"
@@ -39,7 +39,7 @@ async def main(song_name):
     return [response1, response2]
 
 
-def sync_data(image_url, lyrics_url, song_path):
+def sync_data(data, image_url, lyrics_url, song_path):
     global lyrics_bool, base_url, url, headers, search_url
     if lyrics_bool:  # if itunes and genius dont match the song and artist
         try:
@@ -121,7 +121,7 @@ def process_init(path, app, db, folders):
                         song_no += 1
                         continue
                     try:
-                        global data, lyrics_bool
+                        global lyrics_bool
 
                         data = datas[0]['results'][0]
                         genius_data = datas[1]["response"]["hits"][0]["result"]
@@ -157,7 +157,7 @@ def process_init(path, app, db, folders):
                         continue
                     song_no += 1
                     t = threading.Thread(target=sync_data, args=(
-                        image_url, lyrics_url, os.path.join(root, i + ext)))
+                        data, image_url, lyrics_url, os.path.join(root, i + ext)))
                     t.daemon = True
                     t.start()
                     if isFile:
