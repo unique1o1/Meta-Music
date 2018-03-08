@@ -1,15 +1,6 @@
 # Meta-Music
 Meta-Music is an open-source project that lets people add metadata to their Music library.
 
-installation for you guys:
-
-        cd static
-        npm install 
-        cd ..
-        virtualenv py3
-        pip install -r requirements
-        python app.py
-        npm run watch
 # Using PIP
         sudo pip install MetaMusic
         sudo npm install -g random-material-color react react-dom
