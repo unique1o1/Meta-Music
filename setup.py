@@ -17,7 +17,7 @@ def parse_requirements(requirements):
 REQUIREMENTS = parse_requirements("requirements.txt")
 setuptools.setup(
     name="MetaMusic",
-    version="1.0.9",
+    version="1.1.0",
     url="https://github.com/unique1o1/Meta-Music",
     author="Yunik Maharjan",
     author_email="yunik.maharjan@icloud.com",
@@ -26,7 +26,7 @@ setuptools.setup(
     platforms="Linux, MacOS, Windows",
     long_description=open('README.md').read(),
     include_package_data=True,
-    install_requires=REQUIREMENTS,
+    install_requires=[i for i in REQUIREMENTS],
 
     packages=setuptools.find_packages(),
     classifiers=[
