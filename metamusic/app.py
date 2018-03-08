@@ -21,6 +21,8 @@ app = Flask(__name__, static_folder="./static/dist",
 database_name = ''.join(random.choices(
     string.ascii_uppercase, k=10))
 db_path = os.path.join(os.getcwd(), '.metamusic')
+if not os.path.exists(db_path):
+    os.mkdir(db_path)
 for i in glob.glob(os.path.join(db_path, '*.db')):
     os.remove(i)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + \
