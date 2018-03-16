@@ -95,14 +95,19 @@ def f(n):
 
 def run():
     if len(sys.argv) >= 2:
-        if os.path.isdir(sys.argv[1]):
-            url = 'http://127.0.0.1:5000/process?path=' + \
-                urllib.parse.quote_plus(sys.argv[1])
-            webbrowser.open(url)
-            app.run(threaded=True)
+
+        if os.path.exists(sys.argv[1]):
+            path = os.path.abspath(sys.argv[1])
+            if os.path.isdir(path):
+                url = 'http://127.0.0.1:5000/process?path=' + \
+                    urllib.parse.quote_plus(path)
+                webbrowser.open(url)
+                app.run(threaded=True)
+            else:
+                folders = [os.path.dirname(path)]
+                process_init(path, app, db, folders)
         else:
-            folders = [os.path.dirname(sys.argv[1])]
-            process_init(sys.argv[1], app, db, folders)
+            raise ValueError("The path/ file you entered doesn't exit")
     else:
         webbrowser.open('http://127.0.0.1:5000/')
         app.run(threaded=True)
