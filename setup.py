@@ -1,6 +1,4 @@
 import setuptools
-
-
 def parse_requirements(requirements):
     # load from requirements.txt
     with open(requirements) as f:
@@ -12,7 +10,6 @@ def parse_requirements(requirements):
         # remove empty lines
         reqs = filter((lambda x: x), nocomments)
         return reqs
-
 
 REQUIREMENTS = parse_requirements("requirements.txt")
 setuptools.setup(
