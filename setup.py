@@ -1,4 +1,15 @@
 import setuptools
+from setuptools.command.install import install
+
+
+class CustomInstallCommand(install):
+    """Customized setuptools install command - prints a friendly greeting. for now"""
+
+    def run(self):
+        install.run(self)
+        print("Hello, developer, how are you? :)")
+
+
 def parse_requirements(requirements):
     # load from requirements.txt
     with open(requirements) as f:
@@ -10,6 +21,7 @@ def parse_requirements(requirements):
         # remove empty lines
         reqs = filter((lambda x: x), nocomments)
         return reqs
+
 
 REQUIREMENTS = parse_requirements("requirements.txt")
 setuptools.setup(
@@ -30,6 +42,9 @@ setuptools.setup(
         'Environment :: Console',
         'Programming Language :: Python :: 3.6'
     ],
+    cmdclass={
+        'install': CustomInstallCommand,
+    },
     entry_points="""
     [console_scripts]
     meta-music=metamusic.app:run
