@@ -14,7 +14,8 @@ class CustomInstallCommand(install):
         print("Hello, developer, how are you? :)")
         if sys.platform == 'linux':
             home = os.path.join(Path.home(), '.metamusic')
-            os.mkdir(home)
+            if not os.path.exists(home):
+                os.mkdir(home)
             os.system(f'cp ./metamusic/metamusic.png {home}')
             desk = f'''\
 [Desktop Entry]
