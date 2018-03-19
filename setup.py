@@ -1,5 +1,9 @@
 import setuptools
+import sys
+import os
 from setuptools.command.install import install
+
+from pathlib import Path
 
 
 class CustomInstallCommand(install):
@@ -8,6 +12,25 @@ class CustomInstallCommand(install):
     def run(self):
         install.run(self)
         print("Hello, developer, how are you? :)")
+        if sys.platform == 'linux':
+            home = os.path.join(Path.home(), '.metamusic')
+            os.mkdir(home)
+            os.system(f'cp ./metamusic/metamusic.png {home}')
+            desk = f'''\
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Name=Meta-Music
+Exec=meta-music
+Icon={home}/metamusic.png
+StartupNotify=true
+Categories=Application;'''
+            with open('./metamusic/meta-music.desktop', 'w') as f:
+                f.write(desk)
+
+            os.system(
+                'sudo cp ./metamusic/meta-music.desktop /usr/share/applications/')
 
 
 def parse_requirements(requirements):
