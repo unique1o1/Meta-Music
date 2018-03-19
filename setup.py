@@ -2,7 +2,12 @@ import setuptools
 import sys
 import os
 from setuptools.command.install import install
+
+from setuptools.command.develop import develop
+from setuptools.command.egg_info import egg_info
 from pathlib import Path
+
+print("Addiasdfasdfasdf")
 
 
 class CustomInstallCommand(install):
@@ -10,14 +15,32 @@ class CustomInstallCommand(install):
 
     def run(self):
         install.run(self)
+        custom_command()
 
-        if sys.platform == 'linux':
 
-            home = os.path.join(Path.home(), '.metamusic')
-            if not os.path.exists(home):
-                os.mkdir(home)
-            os.system(f'cp ./metamusic/metamusic.png {home}')
-            desk = f'''\
+class CustomEggInfoCommand(egg_info):
+    """Customized setuptools install command - prints a friendly greeting. for now"""
+
+    def run(self):
+        egg_info.run(self)
+        custom_command()
+
+
+class CustomDevelopCommand(develop):
+    """Customized setuptools install command - prints a friendly greeting. for now"""
+
+    def run(self):
+        develop.run(self)
+        custom_command()
+
+
+def custom_command():
+    if sys.platform == 'linux':
+        home = os.path.join(Path.home(), '.metamusic')
+        if not os.path.exists(home):
+            os.mkdir(home)
+        os.system(f'cp ./metamusic/metamusic.png {home}')
+        desk = f'''\
 [Desktop Entry]
 Version=1.0
 Type=Application
@@ -27,12 +50,12 @@ Exec=meta-music
 Icon={home}/metamusic.png
 StartupNotify=true
 Categories=Application;'''
-            with open('./metamusic/meta-music.desktop', 'w') as f:
-                f.write(desk)
+        with open('./metamusic/meta-music.desktop', 'w') as f:
+            f.write(desk)
 
-            os.system(
-                'sudo cp ./metamusic/meta-music.desktop /usr/share/applications/')
-            print("Adding desktop icon....")
+        os.system(
+            'sudo cp ./metamusic/meta-music.desktop /usr/share/applications/')
+        print("Adding desktop icon....")
 
 
 def parse_requirements(requirements):
@@ -51,7 +74,7 @@ def parse_requirements(requirements):
 REQUIREMENTS = parse_requirements("requirements.txt")
 setuptools.setup(
     name="MetaMusic",
-    version="1.1.2",
+    version="1.1.4",
     url="https://github.com/unique1o1/Meta-Music",
     author="Yunik Maharjan",
     author_email="yunik.maharjan@icloud.com",
@@ -69,6 +92,8 @@ setuptools.setup(
     ],
     cmdclass={
         'install': CustomInstallCommand,
+        'develop': CustomDevelopCommand,
+        'egg_info': CustomEggInfoCommand
     },
     entry_points="""
     [console_scripts]
