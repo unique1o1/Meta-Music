@@ -2,6 +2,7 @@
 # Meta-Music
 Meta-Music is an open-source project that lets people add metadata to their Music library.
 
+** Python 3.6 or higher needed **
 # Using PIP
         sudo pip install MetaMusic
         meta-music
