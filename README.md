@@ -18,7 +18,7 @@ Meta-Music is a simple application for Linux and Mac (windows support coming up)
         # Or
         meta-music /path/to/folder or song
         
-* Debian users can open the application through the icon *
+** Debian users can open the application through the icon **
 # Demo
 
 ![demo](https://media.giphy.com/media/8PBFETWIZ39tme3vow/giphy.gif)
@@ -28,4 +28,4 @@ Meta-Music is a simple application for Linux and Mac (windows support coming up)
  
 **Note for Windows users**: Currently the program is not working for windows
 
-* If you have any problems do open an issue *
+** If you have any problems do open an issue **
