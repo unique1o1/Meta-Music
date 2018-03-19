@@ -7,6 +7,7 @@ Meta-Music is an open-source project that lets people add metadata to their Musi
         meta-music
         # Or
         meta-music /path/to/folder or song
+        
 # Using source
         
         cd Meta-Music
@@ -15,6 +16,8 @@ Meta-Music is an open-source project that lets people add metadata to their Musi
         meta-music
         # Or
         meta-music /path/to/folder or song
+        
+* Linux users can open the application through the icon *
 # Demo
 
 ![demo](https://media.giphy.com/media/8PBFETWIZ39tme3vow/giphy.gif)
