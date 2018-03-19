@@ -29,4 +29,4 @@ Meta-Music is a simple application for Linux and Mac (windows support coming up)
  
 **Note for Windows users**: Currently the program is not working for windows
 
-**If you have any problems do open an issue**
+* **If you have any problems do open an issue**
