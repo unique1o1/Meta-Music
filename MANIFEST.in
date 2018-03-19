@@ -2,6 +2,8 @@ include metamusic/static/*.html
 include metamusic/static/dist/*
 include metamusic/static/dist/css/*
 include metamusic/static/dist/img/*
+include metamusic/metamusic.png
+include metamusic/meta-music.desktop
 include requirements.txt
 
 global-exclude *.pyc

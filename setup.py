@@ -2,7 +2,6 @@ import setuptools
 import sys
 import os
 from setuptools.command.install import install
-
 from pathlib import Path
 
 
@@ -11,8 +10,9 @@ class CustomInstallCommand(install):
 
     def run(self):
         install.run(self)
-        print("Hello, developer, how are you? :)")
+
         if sys.platform == 'linux':
+
             home = os.path.join(Path.home(), '.metamusic')
             if not os.path.exists(home):
                 os.mkdir(home)
@@ -32,6 +32,7 @@ Categories=Application;'''
 
             os.system(
                 'sudo cp ./metamusic/meta-music.desktop /usr/share/applications/')
+            print("Adding desktop icon....")
 
 
 def parse_requirements(requirements):
