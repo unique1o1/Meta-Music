@@ -13,6 +13,9 @@ import random
 from metamusic.fetcher import process_init
 from metamusic.model import db, fetcher_database
 import random
+
+from pathlib import Path
+
 import os
 
 app = Flask(__name__, static_folder="./static/dist",
@@ -20,7 +23,7 @@ app = Flask(__name__, static_folder="./static/dist",
 
 database_name = ''.join(random.choices(
     string.ascii_uppercase, k=10))
-db_path = os.path.join(os.getcwd(), '.metamusic')
+db_path = os.path.join(Path.home(), '.metamusic')
 if not os.path.exists(db_path):
     os.mkdir(db_path)
 for i in glob.glob(os.path.join(db_path, '*.db')):
