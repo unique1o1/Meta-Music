@@ -102,7 +102,7 @@ def run():
         if os.path.exists(sys.argv[1]):
             path = os.path.abspath(sys.argv[1])
             if os.path.isdir(path):
-                url = 'http://127.0.0.1:5000/process?path=' + \
+                url = 'http://127.0.0.1:5999/process?path=' + \
                     urllib.parse.quote_plus(path)
                 webbrowser.open(url)
                 app.run(threaded=True)
