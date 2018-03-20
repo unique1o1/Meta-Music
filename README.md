@@ -1,12 +1,14 @@
        
 # Meta-Music
-Meta-Music is an open-source project that lets people add metadata to their Music library.
+Meta-Music is a simple application for Linux and Mac (windows support coming up) for adding Metadata to your music File/ Library with a few simple clicks.
 
+**Python 3.6 or higher needed**
 # Using PIP
         sudo pip install MetaMusic
         meta-music
         # Or
         meta-music /path/to/folder or song
+        
 # Using source
         
         cd Meta-Music
@@ -15,6 +17,9 @@ Meta-Music is an open-source project that lets people add metadata to their Musi
         meta-music
         # Or
         meta-music /path/to/folder or song
+        
+**Debian users can open the application through the icon**
+
 # Demo
 
 ![demo](https://media.giphy.com/media/8PBFETWIZ39tme3vow/giphy.gif)
@@ -22,5 +27,6 @@ Meta-Music is an open-source project that lets people add metadata to their Musi
 
 **Note for MacOS users**: If you experience problems with fork in macOS, put `OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES` in your environment variable to fix the issue. This is an issue with macOS 10.13 where Apple changed the way fork() works on the OS which is incompatible with Python fork().
  
-**Note for Windows users**: Also install python-magic-bin using pip i.e `pip install python-magic-bin`. But current the program is not working for windows
-       
+**Note for Windows users**: Currently the program is not working for windows
+
+* **If you have any problems do open an issue**
