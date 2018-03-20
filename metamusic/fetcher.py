@@ -49,7 +49,7 @@ def sync_data(data, image_url, lyrics_url, song_path):
                                   headers=headers).json()
 
             lyrics_url = genius["response"]["hits"][0]["result"]['url']
-            print('inside')
+
         except IndexError:
             print("indexerror")
     page = requests.get(lyrics_url)
@@ -76,8 +76,6 @@ def sync_data(data, image_url, lyrics_url, song_path):
     audiofile.tag.lyrics.set(lyrics_)
 
     audiofile.tag.save()
-
-    print(song_path, data["artistName"])
 
 
 def process_init(path, app, db, folders):

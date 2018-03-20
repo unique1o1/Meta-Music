@@ -7,8 +7,6 @@ from setuptools.command.develop import develop
 from setuptools.command.egg_info import egg_info
 from pathlib import Path
 
-print("Addiasdfasdfasdf")
-
 
 class CustomInstallCommand(install):
     """Customized setuptools install command - prints a friendly greeting. for now"""
@@ -74,7 +72,7 @@ def parse_requirements(requirements):
 REQUIREMENTS = parse_requirements("requirements.txt")
 setuptools.setup(
     name="MetaMusic",
-    version="1.1.4",
+    version="1.1.5",
     url="https://github.com/unique1o1/Meta-Music",
     author="Yunik Maharjan",
     author_email="yunik.maharjan@icloud.com",
