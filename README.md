@@ -1,4 +1,5 @@
-       
+[![Build Status](https://travis-ci.org/unique1o1/Meta-Music.svg?branch=pypi_package)](https://travis-ci.org/unique1o1/Meta-Music/)
+
 # Meta-Music
 Meta-Music is a simple application for Linux and Mac (windows support coming up) for adding Metadata to your music File/ Library with a few simple clicks.
 
