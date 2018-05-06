@@ -20,7 +20,6 @@ import os
 
 app = Flask(__name__, static_folder="./static/dist",
             template_folder="./static")
-
 database_name = ''.join(random.choices(
     string.ascii_uppercase, k=10))
 db_path = os.path.join(Path.home(), '.metamusic')
@@ -37,19 +36,16 @@ db.init_app(app)
 
 @app.route('/')
 def index():
-
     return render_template('index.html')
 
 
 @app.route("/process", methods=["GET"])
 def process():
-
     path = request.args['path']
     if not os.path.exists(path):
         time.sleep(.3)
         return render_template("nofile.html")
     total_songs = 0
-
     if not os.path.isfile(path):
         p = Pool()
         folders = []
@@ -62,7 +58,6 @@ def process():
             total_songs += numbers
         p.close()
         p.join()
-
         t = multiprocessing.Process(
             target=process_init, args=(path, app, db, folders))
     else:
@@ -79,7 +74,6 @@ def process():
 @app.route('/fetch/<int:no>')
 def fetch(no):
     return_data = fetcher_database.query.filter_by(uid=no).first()
-
     while return_data is None:
         time.sleep(0.01)
         return_data = fetcher_database.query.filter_by(uid=no).first()
@@ -103,7 +97,6 @@ def page_not_found(e):
 
 def run():
     if len(sys.argv) >= 2:
-
         if os.path.exists(sys.argv[1]):
             path = os.path.abspath(sys.argv[1])
             if os.path.isdir(path):
