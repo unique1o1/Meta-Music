@@ -96,6 +96,11 @@ def f(n):
         return 0
 
 
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template("nofile.html")
+
+
 def run():
     if len(sys.argv) >= 2:
 
