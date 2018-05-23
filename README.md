@@ -17,7 +17,7 @@ Meta-Music is an open-source project that lets people add metadata to their Musi
         meta-music
         # Or
         meta-music /path/to/music.mp3 #absolute path only
-# Using docer
+# Using docker
        cd Meta-Music
        docker build -t meta-music:latest . 
        docker run --rm -ti -v /your/local/pathto/Music:/music meta-music:latest bash  
