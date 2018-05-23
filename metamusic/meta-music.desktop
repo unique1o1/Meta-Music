@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Name=Meta-Music
+Exec=meta-music
+Icon=/home/unique/.metamusic/metamusic.png
+StartupNotify=true
+Categories=Application;
