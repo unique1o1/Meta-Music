@@ -90,4 +90,4 @@ def f(n):
 
 if __name__ == "__main__":
 
-    app.run(debug=True, threaded=True)
+    app.run(debug=True, host='0.0.0.0', threaded=True, port=5000)
