@@ -4,10 +4,7 @@ import sys
 import json
 import warnings
 import argparse
-
-
-def initialize():
-
+from metamusic import MetaMusic
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
@@ -16,8 +13,8 @@ if __name__ == '__main__':
                         help='Fingerprint files in a directory\n'
                         'Usages: \n'
                         '--fingerprint /path/to/directory extension\n'
-                        '--fingerprint /path/to/directory')
-    parser.add_argument('-r', '--recognize', nargs=2,
+                        '--fingerprint /path/to/file')
+    parser.add_argument('-r', '--recognize', nargs=None,
                         help='Recognize what is songs\n'
                         'Usage: \n'
                         '--recognize path/to/file \n')
@@ -25,13 +22,14 @@ if __name__ == '__main__':
     if not args.fingerprint and not args.recognize:
         parser.print_help()
         sys.exit(0)
+    meta = MetaMusic()
     if args.fingerprint:
         # Fingerprint all files in a directory
         if len(args.fingerprint) == 2:
             directory = args.fingerprint[0]
             extension = args.fingerprint[1]
-            print("Fingerprinting all .%s files in the %s directory"
-                  % (extension, directory))
+            print("Fingerprinting all .{} files in the {} directory".format(
+                extension, directory))
             meta.fingerprint_directory(directory, ['.'+extension])
 
         elif len(args.fingerprint) == 1:
@@ -45,13 +43,13 @@ if __name__ == '__main__':
     elif args.recognize:
         # Recognize audio source
         song = None
-        source = args.recognize[0]
+        source = args.recognize
 
         if os.path.isdir(source):
             print(
                 "Please specify an file if you'd like to recognize the song")
             sys.exit(1)
-        song = meta.recognize(FileRecognizer, opt_arg)
+        song = meta.recognize()  # to be used later
         print(song)
 
     sys.exit(0)
