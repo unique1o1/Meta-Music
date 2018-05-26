@@ -55,12 +55,12 @@ class MetaMusic():
                 if i.endswith('.mp3'):
                     mp3_file.append(os.path.join(dirpath, i))
 
-        hashes = pool.map(decoder.unique_hash, mp3_file)
+        hashes_sha1 = pool.map(decoder.unique_hash, mp3_file)
         pool.close()
         pool.join()
 
         # don't refingerprint already fingerprinted files
-        for n, i in enumerate(hashes):
+        for n, i in enumerate(hashes_sha1):
 
             if i in self.songhashes_set:
                 print("%s already fingerprinted, continuing..." % i)
@@ -69,14 +69,15 @@ class MetaMusic():
 
             filenames_to_fingerprint.append(mp3_file[n])
         for i in temp_hash:
-            hashes.remove(i)
+            hashes_sha1.remove(i)
         print('added')
         mp3_file = None
         temp_hash = None
 
         # Prepare _fingerprint_worker input
         worker_input = zip(filenames_to_fingerprint, [
-                           self.limit] * len(filenames_to_fingerprint), range(len(hashes)))
+                           self.limit] * len(filenames_to_fingerprint), range(len(hashes_sha1)))
+        pool = multiprocessing.Pool(nprocesses)
 
         # Send off our tasks
         iterator = pool.imap_unordered(_fingerprint_worker, worker_input)
@@ -94,26 +95,25 @@ class MetaMusic():
                 # Print traceback because we can't reraise it here
                 traceback.print_exc(file=sys.stdout)
             else:
-                print(type(file_hash))
-                database.insert_song(file_hash=hashes[num],
+                database.insert_song(file_hash=hashes_sha1[num],
                                      song_name=song_name)
                 database.set_fingerprinted_flag()
         pool.close()
         pool.join()
 
 
-def _fingerprint_worker(filename, limit=None, song_name=None):
+def _fingerprint_worker(filename):
     # Pool.imap sends arguments as tuples so we have to unpack
     # them ourself.
     try:
-        filename, limit = filename
-
+        filename, limit, num = filename
+        song_name = None
     except ValueError:
         pass
 
     songname, extension = os.path.splitext(os.path.basename(filename))
     song_name = song_name or songname
-    channels, Fs, file_hash = decoder.read(filename, limit)
+    channels, Fs = decoder.read(filename, limit)
     result = set()
     channel_amount = len(channels)
 
@@ -127,4 +127,4 @@ def _fingerprint_worker(filename, limit=None, song_name=None):
                                                  filename))
         result = set(hashes)
 
-    return song_name, result, file_hash
+    return song_name, result, num

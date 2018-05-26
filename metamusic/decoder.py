@@ -10,15 +10,14 @@ def unique_hash(filepath, blocksize=500):
     """ Small function to generate a hash to uniquely generate
     a file. 
     """
-    if os.path.abspath(filepath).endswith('.mp3'):
-        s = sha1()
-        with open(filepath, "rb") as f:
-            buf = f.read(blocksize)
-            s.update(buf)
-        return s.hexdigest().upper()
+    s = sha1()
+    with open(filepath, "rb") as f:
+        buf = f.read(blocksize)
+        s.update(buf)
+    return s.hexdigest().upper()
 
 
-def read(filename, limit=None, num):
+def read(filename, limit=None):
     """
     Reads any file supported by pydub (ffmpeg) and returns the data contained
     within. If file reading fails due to input being a 24-bit wav file,
@@ -44,7 +43,7 @@ def read(filename, limit=None, num):
 
     fs = audiofile.frame_rate
 
-    return channels, fs, num
+    return channels, fs
 
 
 def path_to_songname(path):
