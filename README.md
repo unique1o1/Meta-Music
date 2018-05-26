@@ -3,7 +3,7 @@
 Meta-Music is an open-source project that lets people add metadata to their Music library.
 
 
- **Note: This branch is not for your personal use. Please use the [pypi_package](https://github.com/unique1o1/Meta-Music/) branch for your use.**
+ **Note: This branch is not for your personal use. Please use the [pypi_package](https://github.com/unique1o1/Meta-Music/tree/pypi_package) branch for your use.**
  
 # Installation from source:
 
