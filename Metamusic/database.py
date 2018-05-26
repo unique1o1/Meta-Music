@@ -4,7 +4,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import Column, Integer, String, LargeBinary, Boolean, ForeignKey
 from contextlib import contextmanager
-import json
+import json,sys
 FINGERPRINTS_TABLENAME = "fingerprints"
 SONGS_TABLENAME = "songs"
 FIELD_SONG_ID = 'song_id'
@@ -18,7 +18,7 @@ FIELD_HASH = 'hash'
 
 
 try:
-    with open('./metamusic/config', 'r') as f:
+    with open('./Metamusic/config', 'r') as f:
         config = json.load(f)
 except IOError as err:
     print("Cannot open configuration: %s. Exiting" % (str(err)))

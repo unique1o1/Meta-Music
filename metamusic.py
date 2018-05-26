@@ -4,7 +4,7 @@ import sys
 import json
 import warnings
 import argparse
-from metamusic import MetaMusic
+from Metamusic import MetaMusic
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
