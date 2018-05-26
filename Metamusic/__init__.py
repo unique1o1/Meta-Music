@@ -1,13 +1,13 @@
 # Database
-from metamusic import database
+from Metamusic import database
 import multiprocessing
 
 import threading
 import os
 import traceback
 import sys
-from metamusic import decoder
-from metamusic import fingerprint
+from Metamusic import decoder
+from Metamusic import fingerprint
 from sqlalchemy import func
 
 
@@ -33,7 +33,7 @@ class MetaMusic():
             song_hash = song.file_sha1
             self.songhashes_set.add(song_hash.decode())
 
-    def fingerprint_directory(self, path, extensions, nprocesses=None):
+    def fingerprint_directory(self, path, nprocesses=None):
 
         # Try to use the maximum amount of processes if not given.
         try:

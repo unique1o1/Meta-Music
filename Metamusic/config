@@ -1,0 +1,7 @@
+{
+"host": "localhost",
+"user": "postgres",
+"passwd": "0", 
+"db": "metamusic",
+"port":"5432"
+}
