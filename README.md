@@ -2,6 +2,9 @@
 # Meta-Music
 Meta-Music is an open-source project that lets people add metadata to their Music library.
 
+
+ **Note: This branch is not for your personal use. Please use the [pypi_package](https://github.com/unique1o1/Meta-Music/) branch for your use.**
+ 
 # Installation from source:
 
         cd static
@@ -33,5 +36,3 @@ Meta-Music is an open-source project that lets people add metadata to their Musi
 
 **Note for MacOS users**: If you experience problems with fork in macOS, put `OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES` in your environment variable to fix the issue. This is an issue with macOS 10.13 where Apple changed the way fork() works on the OS which is incompatible with Python fork().
  
-        
-
