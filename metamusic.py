@@ -1,10 +1,12 @@
-
+#!/usr/bin/python3
 import os
 import sys
 import json
 import warnings
 import argparse
 from Metamusic import MetaMusic
+
+warnings.filterwarnings("ignore")
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
@@ -34,6 +36,7 @@ if __name__ == '__main__':
         else:
             print("Fingerprinting {}..!".format(
                 os.path.basename(filepath)))
+            meta.fingerprint_file(filepath)
 
     elif args.recognize:
         # Recognize audio source

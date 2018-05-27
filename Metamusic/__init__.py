@@ -63,14 +63,15 @@ class MetaMusic():
         for n, i in enumerate(hashes_sha1):
 
             if i in self.songhashes_set:
-                print("%s already fingerprinted, continuing..." % i)
+                print("{} already fingerprinted, continuing...".format(
+                    os.path.basename(mp3_file[n])))
                 temp_hash.append(i)
                 continue
 
             filenames_to_fingerprint.append(mp3_file[n])
         for i in temp_hash:
             hashes_sha1.remove(i)
-        print('added')
+
         mp3_file = None
         temp_hash = None
 
@@ -85,7 +86,7 @@ class MetaMusic():
         # Loop till we have all of them
         while True:
             try:
-                song_name, hashes, num = iterator.next()
+                song_name, song_hashes, num = iterator.next()
             except multiprocessing.TimeoutError:
                 continue
             except StopIteration:
@@ -100,6 +101,19 @@ class MetaMusic():
                 database.set_fingerprinted_flag()
         pool.close()
         pool.join()
+
+    def fingerprint_file(self, filepath):
+        songname = decoder.path_to_songname(filepath)
+        file_hash = decoder.unique_hash(filepath)
+        # don't refingerprint already fingerprinted files
+        if file_hash in self.songhashes_set:
+            print("{} already fingerprinted, continuing...".format(songname))
+        else:
+            song_name, hashes, _ = _fingerprint_worker(
+                (filepath, self.limit, '_'))
+            database.insert_song(file_hash=file_hash,
+                                 song_name=song_name)
+            database.set_fingerprinted_flag()
 
 
 def _fingerprint_worker(filename):
