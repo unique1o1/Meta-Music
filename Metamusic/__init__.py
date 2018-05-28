@@ -1,8 +1,6 @@
 # Database
 from Metamusic import database
 import multiprocessing
-
-import threading
 import os
 import traceback
 import sys
@@ -61,7 +59,6 @@ class MetaMusic():
 
         # don't refingerprint already fingerprinted files
         for n, i in enumerate(hashes_sha1):
-
             if i in self.songhashes_set:
                 print("{} already fingerprinted, continuing...".format(
                     os.path.basename(mp3_file[n])))
@@ -96,6 +93,7 @@ class MetaMusic():
                 # Print traceback because we can't reraise it here
                 traceback.print_exc(file=sys.stdout)
             else:
+
                 database.insert_song(file_hash=hashes_sha1[num],
                                      song_name=song_name)
                 database.set_fingerprinted_flag()
