@@ -23,7 +23,7 @@ for i in glob.glob(os.path.join(db_path, '*.db')):
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + \
     db_path + '/' + database_name + '.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.secret_key = "thisisyunik"
+# app.secret_key = "thisisyunik"
 db.init_app(app)
 
 
@@ -89,5 +89,4 @@ def f(n):
 
 
 if __name__ == "__main__":
-
     app.run(debug=True, host='0.0.0.0', threaded=True, port=5000)
