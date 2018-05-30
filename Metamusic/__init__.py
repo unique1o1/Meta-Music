@@ -96,7 +96,7 @@ class MetaMusic():
 
                 database.insert_song(file_hash=hashes_sha1[num],
                                      song_name=song_name)
-                fingerprint()
+ 
                 database.set_fingerprinted_flag()
         pool.close()
         pool.join()
