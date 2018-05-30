@@ -19,7 +19,7 @@ Meta-Music is an open-source project that lets people add metadata to their Musi
         sudo npm install -g random-material-color react react-dom
         meta-music
         # Or
-        meta-music /path/to/music.mp3 #absolute path only
+        meta-music /path/to/music.mp3
 # Using docker
        cd Meta-Music
        docker build -t meta-music:latest . 
