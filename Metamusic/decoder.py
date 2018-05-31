@@ -8,7 +8,8 @@ from hashlib import sha1
 
 def unique_hash(filepath, blocksize=500):
     """ Small function to generate a hash to uniquely generate
-    a file. 
+    a file.
+    Default blocksize is `500`
     """
     s = sha1()
     with open(filepath, "rb") as f:
@@ -20,13 +21,7 @@ def unique_hash(filepath, blocksize=500):
 def read(filename, limit=None):
     """
     Reads any file supported by pydub (ffmpeg) and returns the data contained
-    within. If file reading fails due to input being a 24-bit wav file,
-    wavio is used as a backup.
-
-    Can be optionally limited to a certain amount of seconds from the start
-    of the file by specifying the `limit` parameter. This is the amount of
-    seconds from the start of the file.
-
+    within.
     returns: (channels, samplerate)
     """
 

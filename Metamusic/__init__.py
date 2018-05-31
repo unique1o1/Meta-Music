@@ -72,15 +72,12 @@ class MetaMusic():
         mp3_file = None
         temp_hash = None
 
-        # Prepare _fingerprint_worker input
         worker_input = zip(filenames_to_fingerprint, [
                            self.limit] * len(filenames_to_fingerprint), range(len(hashes_sha1)))
         pool = multiprocessing.Pool(nprocesses)
 
-        # Send off our tasks
         iterator = pool.imap_unordered(_fingerprint_worker, worker_input)
 
-        # Loop till we have all of them
         while True:
             try:
                 song_name, song_hashes, num = iterator.next()
@@ -96,7 +93,7 @@ class MetaMusic():
 
                 database.insert_song(file_hash=hashes_sha1[num],
                                      song_name=song_name)
- 
+
                 database.set_fingerprinted_flag()
         pool.close()
         pool.join()

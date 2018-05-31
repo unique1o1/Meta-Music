@@ -45,6 +45,7 @@ def session_withcommit():
 
 
 def commit(func):
+    '''Used as a decorator for automatically making session commits'''
     def wrap(**kwarg):
         with session_withcommit() as session:
             a = func(**kwarg)
