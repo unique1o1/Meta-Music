@@ -1,5 +1,5 @@
 {
-"host": "localhost",
+"host": "172.17.0.3",
 "user": "postgres",
 "passwd": "0", 
 "db": "metamusic",

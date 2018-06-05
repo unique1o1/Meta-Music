@@ -1,4 +1,4 @@
-#%%
+# %%
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -6,6 +6,8 @@ from sqlalchemy import Column, Integer, String, LargeBinary, Boolean, ForeignKey
 from contextlib import contextmanager
 import json
 import sys
+
+
 FINGERPRINTS_TABLENAME = "fingerprints"
 SONGS_TABLENAME = "songs"
 FIELD_SONG_ID = 'song_id'
@@ -15,7 +17,7 @@ FIELD_SONGNAME = 'song_name'
 FINGERPRINTS_TABLENAME = 'fingerprints'
 FIELD_OFFSET = 'offset'
 FIELD_HASH = 'hash'
-#%%
+# %%
 
 
 try:
@@ -29,8 +31,8 @@ engine = create_engine(
 Base = declarative_base(engine)
 metadata = Base.metadata
 Session = sessionmaker(bind=engine)
-
-#%%
+metadata.create_all(engine)
+# %%
 
 
 @contextmanager
@@ -60,7 +62,7 @@ class songs(Base):
     song_name = Column(FIELD_SONGNAME, String(250), nullable=False)
     fingerprinted = Column(FIELD_FINGERPRINTED, Boolean, default=0)
     file_sha1 = Column(FIELD_FILE_SHA1, LargeBinary, nullable=False)
-#%%
+# %%
 
 
 class fingerprints(Base):
@@ -76,7 +78,7 @@ class fingerprints(Base):
     # #%%
     # metadata.create_all(engine)
 
-    #%%
+    # %%
 
 
 def get_songs():
@@ -101,7 +103,7 @@ def set_fingerprinted_flag():
 def delete_unfingerprinted_songs():
     with session_withcommit() as session:
         session.query(songs).filter_by(fingerprinted=False).delete()
-#%%
+# %%
 
 
 @commit
