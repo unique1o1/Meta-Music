@@ -33,7 +33,7 @@ if __name__ == '__main__':
     if not args.fingerprint and not args.recognize:
         parser.print_help()
         sys.exit(0)
-    meta = MetaMusic(10 if args.limit is None else int(args.limit))
+    meta = MetaMusic(12 if args.limit is None else int(args.limit))
     if args.fingerprint:
 
         filepath = args.fingerprint
