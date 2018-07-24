@@ -144,7 +144,7 @@ def generate_hashes(peaks, fan_value=DEFAULT_FAN_VALUE):
     [(e05b341a9b77a51fd26, 32), ... ]
     """
     if PEAK_SORT:
-        peaks = sorted(peaks, key=lambda x: x[1])
+        peaks.sort(key=itemgetter(1))
         # peaks.sort(key=itemgetter(1))
 
     for i in range(len(peaks)):
