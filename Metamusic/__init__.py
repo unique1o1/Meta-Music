@@ -120,6 +120,10 @@ class MetaMusic():
 
             database.set_fingerprinted_flag(sid)
 
+    def recognize(self, recognizer, *options, **kwoptions):
+        r = recognizer(self)
+        return r.recognize(*options, **kwoptions)
+
 
 def _fingerprint_worker(filename):
     # Pool.imap sends arguments as tuples so we have to unpack
