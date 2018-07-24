@@ -21,6 +21,7 @@ parts/
 sdist/
 var/
 wheels/
+py3/
 *.egg-info/
 .installed.cfg
 *.egg
