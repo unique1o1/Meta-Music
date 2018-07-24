@@ -2,7 +2,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy import Column, Integer, String, LargeBinary, Boolean, ForeignKey
+from sqlalchemy import Column, Integer, String, Binary, Boolean, ForeignKey
 from contextlib import contextmanager
 import json
 import sys
@@ -63,7 +63,7 @@ class songs(Base):
                      primary_key=True, unique=True, nullable=False)
     song_name = Column(FIELD_SONGNAME, String(250), nullable=False)
     fingerprinted = Column(FIELD_FINGERPRINTED, Boolean, default=0)
-    file_sha1 = Column(FIELD_FILE_SHA1, LargeBinary, nullable=False)
+    file_sha1 = Column(FIELD_FILE_SHA1, Binary(length=40), nullable=False)
 # %%
 
 
@@ -71,11 +71,11 @@ class fingerprints(Base):
     __tablename__ = 'fingerprints'
     hash_id = Column('hash_id', Integer,
                      primary_key=True, unique=True, nullable=False)
-    hash = Column(FIELD_HASH, LargeBinary, unique=True,
+    hash = Column(FIELD_HASH, Binary(length=20),
                   nullable=False, index=True)
     song_id = Column(FIELD_SONG_ID, Integer, ForeignKey(
-        'songs.song_id'), unique=True, nullable=False)
-    offset = Column(FIELD_OFFSET, Integer, unique=True, nullable=False)
+        'songs.song_id'), nullable=False)
+    offset = Column(FIELD_OFFSET, Integer, nullable=False)
 
     # #%%
     # metadata.create_all(engine)
@@ -113,18 +113,11 @@ def insert_song(file_hash, song_name):
     return songs(song_name=song_name, file_sha1=binascii.unhexlify(file_hash))
 
 
-def grouper(iterable, n, fillvalue=None):
-    args = [iter(iterable)] * 2
-    # return (filter(None, values) for values
-    #         in zip_longest(fillvalue=fillvalue, *args))
-
-
 def insert_hashes(sid, hashes):
-
-    values = []
-    for hash, offset in hashes:
-        values.append((hash, sid, offset))
-    grouper(values, 1000)
-
-    # for split_values in grouper(values, 1000):
-    #         cur.executemany(self.INSERT_FINGERPRINT, split_values)
+    with session_withcommit() as session:
+        for hash, offset in set(hashes):
+            session.add(fingerprints(
+                hash=binascii.unhexlify(hash),
+                song_id=sid,
+                offset=int(offset)
+            ))

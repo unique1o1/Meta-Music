@@ -6,7 +6,7 @@ from pydub.utils import audioop
 from hashlib import sha1
 
 
-def unique_hash(filepath, blocksize=500):
+def unique_hash(filepath, blocksize=80):
     """ Small function to generate a hash to uniquely generate
     a file.
     Default blocksize is `500`
