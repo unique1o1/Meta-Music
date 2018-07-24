@@ -107,16 +107,18 @@ class MetaMusic():
     def fingerprint_file(self, filepath):
         songname = decoder.path_to_songname(filepath)
         file_hash = decoder.unique_hash(filepath)
+        print(type(file_hash))
         # don't refingerprint already fingerprinted files
         if file_hash in self.songhashes_set:
             print("{} already fingerprinted, continuing...".format(songname))
         else:
             song_name, hashes, _ = _fingerprint_worker(
                 (filepath, self.limit, '_'))
-            database.insert_song(file_hash=file_hash,
-                                 song_name=song_name)
+            sid = database.insert_song(file_hash=file_hash,
+                                       song_name=song_name)
+            database.insert_hashes(sid, hashes)
 
-            database.set_fingerprinted_flag()
+            database.set_fingerprinted_flag(sid)
 
 
 def _fingerprint_worker(filename):

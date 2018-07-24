@@ -20,13 +20,21 @@ if __name__ == '__main__':
                         help='Recognize what is songs\n'
                         'Usage: \n'
                         '--recognize path/to/file \n')
+    parser.add_argument(
+        '-l',
+        '--limit',
+        nargs='?',
+        default=None,
+        help='Number of seconds from the start of the music files to limit fingerprinting to.\n'
+        'Usage: \n'
+        '--limit number_of_seconds \n'
+    )
     args = parser.parse_args()
     if not args.fingerprint and not args.recognize:
         parser.print_help()
         sys.exit(0)
-    meta = MetaMusic(10)
+    meta = MetaMusic(10 if args.limit is None else int(args.limit))
     if args.fingerprint:
-        # Fingerprint all files in a directory
 
         filepath = args.fingerprint
         if os.path.isdir(filepath):
