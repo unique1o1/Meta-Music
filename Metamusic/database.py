@@ -121,3 +121,22 @@ def insert_hashes(sid, hashes):
                 song_id=sid,
                 offset=int(offset)
             ))
+
+
+def return_matches(self, hashes):
+
+        # Create a dictionary of hash => offset pairs for later lookups
+    mapper = {}
+    values = []
+    for hash, offset in hashes:
+        mapper[hash] = offset
+        values.append(binascii.unhexlify(hash))
+
+    # Get an iterable of all the hashes we need
+    session = Session()
+    for fingerprint in session.query(fingerprints).filter(
+        fingerprints.hash.in_(values)
+    ):
+        hash = binascii.hexlify(fingerprint.hash).decode('utf-8')
+
+        yield (fingerprint.song_id, fingerprint.offset - mapper[hash])

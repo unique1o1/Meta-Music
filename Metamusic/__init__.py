@@ -31,7 +31,7 @@ class MetaMusic():
         self.songhashes_set = set()  # to know which ones we've computed before
         for song in self.songs:
             self.songhashes_set.add(binascii.hexlify(
-                song.file_sha1).upper().decode('utf-8'))
+                song.file_sha1).decode('utf-8'))
 
     def fingerprint_directory(self, path, nprocesses=None):
 
@@ -120,9 +120,13 @@ class MetaMusic():
 
             database.set_fingerprinted_flag(sid)
 
-    def recognize(self, recognizer, *options, **kwoptions):
+    def recognize(self, recognizer, filename):
         r = recognizer(self)
-        return r.recognize(*options, **kwoptions)
+        return r.recognize_file(filename)
+
+    def find_matches(self, samples, Fs=fingerprint.DEFAULT_FS):
+        hashes = fingerprint.fingerprint(samples, Fs=Fs)
+        return database.return_matches(hashes)
 
 
 def _fingerprint_worker(filename):
