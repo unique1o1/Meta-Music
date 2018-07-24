@@ -2,10 +2,12 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+from multiprocessing import Pool, cpu_count, TimeoutError
 from sqlalchemy import Column, Integer, String, Binary, Boolean, ForeignKey
 from contextlib import contextmanager
 import json
 import sys
+import time
 from itertools import zip_longest
 import binascii
 FINGERPRINTS_TABLENAME = "fingerprints"
@@ -83,6 +85,11 @@ class fingerprints(Base):
     # %%
 
 
+def get_song_by_id(sid):
+    session = Session()
+    return session.query(songs).filter(songs.song_id == sid).one_or_none()
+
+
 def get_songs():
     """
     Return songs that have the fingerprinted flag set TRUE (1).
@@ -123,7 +130,7 @@ def insert_hashes(sid, hashes):
             ))
 
 
-def return_matches(self, hashes):
+def return_matches(hashes):
 
         # Create a dictionary of hash => offset pairs for later lookups
     mapper = {}
@@ -135,8 +142,23 @@ def return_matches(self, hashes):
     # Get an iterable of all the hashes we need
     session = Session()
     for fingerprint in session.query(fingerprints).filter(
-        fingerprints.hash.in_(values)
-    ):
+            fingerprints.hash.in_(values)):
         hash = binascii.hexlify(fingerprint.hash).decode('utf-8')
-
         yield (fingerprint.song_id, fingerprint.offset - mapper[hash])
+
+    # pool = Pool(cpu_count())
+    # iterator = pool.imap(return_Matches_Pool, session.query(fingerprints).filter(
+    #     fingerprints.hash.in_(values)))
+    # while True:
+    #     try:
+    #         song_id, offset, hash = iterator.next()
+    #         yield (song_id, offset-mapper[hash])
+    #     except TimeoutError:
+    #         continue
+    #     except StopIteration:
+    #         break
+
+
+def return_Matches_Pool(fingerprint):
+    return (fingerprint.song_id, fingerprint.offset,
+            binascii.hexlify(fingerprint.hash).decode('utf-8'))

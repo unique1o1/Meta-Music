@@ -92,10 +92,6 @@ class MetaMusic():
                 # Print traceback because we can't reraise it here
                 traceback.print_exc(file=sys.stdout)
             else:
-                import binascii
-                print(hashes_sha1[num])
-
-                print(binascii.unhexlify(hashes_sha1[num]))
                 sid = database.insert_song(file_hash=hashes_sha1[num],
                                            song_name=song_name)
                 database.insert_hashes(sid, song_hashes)
@@ -127,6 +123,53 @@ class MetaMusic():
     def find_matches(self, samples, Fs=fingerprint.DEFAULT_FS):
         hashes = fingerprint.fingerprint(samples, Fs=Fs)
         return database.return_matches(hashes)
+
+    def align_matches(self, matches):
+        """
+            Finds hash matches that align in time with other matches and finds
+            consensus about which hashes are "true" signal from the audio.
+            Returns a dictionary with match information.
+        """
+        # align by diffs
+        diff_counter = {}
+        largest = 0
+        largest_count = 0
+        song_id = -1
+        for sid, diff in matches:
+
+            if diff not in diff_counter:
+                diff_counter[diff] = {}
+            if sid not in diff_counter[diff]:
+                diff_counter[diff][sid] = 0
+            diff_counter[diff][sid] += 1
+
+            if diff_counter[diff][sid] > largest_count:
+                largest = diff
+                largest_count = diff_counter[diff][sid]
+                song_id = sid
+
+        # extract idenfication
+        song = database.get_song_by_id(song_id)
+        if song:
+            songname = song.song_name
+        else:
+            return None
+
+        # return match info
+        nseconds = round(
+            float(largest) / fingerprint.DEFAULT_FS *
+            fingerprint.DEFAULT_WINDOW_SIZE * fingerprint.DEFAULT_OVERLAP_RATIO,
+            5
+        )
+        song = {
+            'song_id': song_id,
+            'song_name': songname,
+            MetaMusic.CONFIDENCE: largest_count,
+            MetaMusic.OFFSET: int(largest),
+            'offset_seconds': nseconds,
+            'file_sha1': binascii.hexlify(song.file_sha1).decode('utf-8'),
+        }
+        return song
 
 
 def _fingerprint_worker(filename):

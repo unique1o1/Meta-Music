@@ -15,7 +15,7 @@ def unique_hash(filepath, blocksize=80):
     with open(filepath, "rb") as f:
         buf = f.read(blocksize)
         s.update(buf)
-    return s.hexdigest().upper()
+    return s.hexdigest()
 
 
 def read(filename, limit=None):
