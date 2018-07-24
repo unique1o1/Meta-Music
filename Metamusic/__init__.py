@@ -8,6 +8,8 @@ from Metamusic import decoder
 from Metamusic import fingerprint
 from sqlalchemy import func
 
+import binascii
+
 
 class MetaMusic():
 
@@ -28,8 +30,8 @@ class MetaMusic():
         self.songs = database.get_songs()
         self.songhashes_set = set()  # to know which ones we've computed before
         for song in self.songs:
-            song_hash = song.file_sha1
-            self.songhashes_set.add(song_hash.decode())
+            self.songhashes_set.add(binascii.hexlify(
+                song.file_sha1).upper().decode('utf-8'))
 
     def fingerprint_directory(self, path, nprocesses=None):
 
@@ -90,10 +92,13 @@ class MetaMusic():
                 # Print traceback because we can't reraise it here
                 traceback.print_exc(file=sys.stdout)
             else:
+                import binascii
+                print(hashes_sha1[num])
 
+                print(binascii.unhexlify(hashes_sha1[num]))
                 sid = database.insert_song(file_hash=hashes_sha1[num],
                                            song_name=song_name)
-
+                database.insert_hashes(sid, song_hashes)
                 database.set_fingerprinted_flag(sid)
         pool.close()
         pool.join()
@@ -109,6 +114,7 @@ class MetaMusic():
                 (filepath, self.limit, '_'))
             database.insert_song(file_hash=file_hash,
                                  song_name=song_name)
+
             database.set_fingerprinted_flag()
 
 
@@ -135,6 +141,6 @@ def _fingerprint_worker(filename):
         hashes = fingerprint.fingerprint(channel, Fs=Fs)
         print("Finished channel %d/%d for %s" % (channeln + 1, channel_amount,
                                                  filename))
-        result = set(hashes)
+        result |= set(hashes)
 
     return song_name, result, num

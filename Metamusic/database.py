@@ -6,8 +6,8 @@ from sqlalchemy import Column, Integer, String, LargeBinary, Boolean, ForeignKey
 from contextlib import contextmanager
 import json
 import sys
-
-
+from itertools import zip_longest
+import binascii
 FINGERPRINTS_TABLENAME = "fingerprints"
 SONGS_TABLENAME = "songs"
 FIELD_SONG_ID = 'song_id'
@@ -108,4 +108,23 @@ def delete_unfingerprinted_songs():
 
 @commit
 def insert_song(file_hash, song_name):
-    return songs(song_name=song_name, file_sha1=file_hash.encode())
+
+    # print(binascii.unhexlify(hashes_sha1[num]))
+    return songs(song_name=song_name, file_sha1=binascii.unhexlify(file_hash))
+
+
+def grouper(iterable, n, fillvalue=None):
+    args = [iter(iterable)] * 2
+    # return (filter(None, values) for values
+    #         in zip_longest(fillvalue=fillvalue, *args))
+
+
+def insert_hashes(sid, hashes):
+
+    values = []
+    for hash, offset in hashes:
+        values.append((hash, sid, offset))
+    grouper(values, 1000)
+
+    # for split_values in grouper(values, 1000):
+    #         cur.executemany(self.INSERT_FINGERPRINT, split_values)

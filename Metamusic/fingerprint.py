@@ -81,12 +81,11 @@ def fingerprint(channel_samples, Fs=DEFAULT_FS,
         Fs=Fs,
         window=mlab.window_hanning,
         noverlap=int(wsize * wratio))[0]
-    print(arr2D[:10])
+
     # apply log transform since specgram() returns linear array
 
     arr2D = 10 * np.log10(arr2D)
-    print('log')
-    print(arr2D[:10])
+
     arr2D[arr2D == -np.inf] = 0  # replace infs with zeros
 
     # find local maxima
@@ -159,11 +158,6 @@ def generate_hashes(peaks, fan_value=DEFAULT_FAN_VALUE):
                 t_delta = t2 - t1
 
                 if MIN_HASH_TIME_DELTA <= t_delta <= MAX_HASH_TIME_DELTA:
-                    h = hashlib.sha1(
-                        str.encode("%s|%s|%s" % (str(freq1), str(freq2), str(t_delta))))
-                    ccc = h.hexdigest()[0:FINGERPRINT_REDUCTION]
-                    print(ccc)
-                    print(t1)
-                    print('hashessss')
-
-                    yield (ccc, t1)
+                    key = "{}|{}|{}".format(freq1, freq2, t_delta)
+                    h = hashlib.sha1(key.encode('utf-8'))
+                    yield (h.hexdigest()[0:FINGERPRINT_REDUCTION], t1)
