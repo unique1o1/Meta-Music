@@ -5,7 +5,7 @@ import json
 import warnings
 import argparse
 from Metamusic import MetaMusic
-
+from Metamusic.recognize import FileRecognizer
 warnings.filterwarnings("ignore")
 
 if __name__ == '__main__':
@@ -55,7 +55,7 @@ if __name__ == '__main__':
             print(
                 "Please specify an file if you'd like to recognize the song")
             sys.exit(1)
-        song = meta.recognize()  # to be used later
+        song = meta.recognize(FileRecognizer, source)  # to be used later
         print(song)
 
     sys.exit(0)
