@@ -91,10 +91,10 @@ class MetaMusic():
                 traceback.print_exc(file=sys.stdout)
             else:
 
-                database.insert_song(file_hash=hashes_sha1[num],
-                                     song_name=song_name)
+                sid = database.insert_song(file_hash=hashes_sha1[num],
+                                           song_name=song_name)
 
-                database.set_fingerprinted_flag()
+                database.set_fingerprinted_flag(sid)
         pool.close()
         pool.join()
 

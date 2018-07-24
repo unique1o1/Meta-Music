@@ -38,7 +38,7 @@ DEFAULT_AMP_MIN = 10
 
 ######################################################################
 # Number of cells around an amplitude peak in the spectrogram in order
-# for Dejavu to consider it a spectral peak. Higher values mean less
+# for MetaMusic to consider it a spectral peak. Higher values mean less
 # fingerprints and faster matching, but can potentially affect accuracy.
 PEAK_NEIGHBORHOOD_SIZE = 20
 
@@ -70,7 +70,10 @@ def fingerprint(channel_samples, Fs=DEFAULT_FS,
     """
     FFT the channel, log transform output, find local maxima, then return
     locally sensitive hashes.
-    """
+    # """
+    # print(len(channel_samples))
+
+    # print(channel_samples[0:22])
     # FFT the signal and extract frequency components
     arr2D = mlab.specgram(
         channel_samples,
@@ -78,9 +81,12 @@ def fingerprint(channel_samples, Fs=DEFAULT_FS,
         Fs=Fs,
         window=mlab.window_hanning,
         noverlap=int(wsize * wratio))[0]
-
+    print(arr2D[:10])
     # apply log transform since specgram() returns linear array
+
     arr2D = 10 * np.log10(arr2D)
+    print('log')
+    print(arr2D[:10])
     arr2D[arr2D == -np.inf] = 0  # replace infs with zeros
 
     # find local maxima
@@ -120,6 +126,7 @@ def get_2D_peaks(arr2D, plot=False, amp_min=DEFAULT_AMP_MIN):
     if plot:
         # scatter of the peaks
         fig, ax = plt.subplots()
+        # print(arr2D)
         ax.imshow(arr2D)
         ax.scatter(time_idx, frequency_idx)
         ax.set_xlabel('Time')
@@ -154,4 +161,9 @@ def generate_hashes(peaks, fan_value=DEFAULT_FAN_VALUE):
                 if MIN_HASH_TIME_DELTA <= t_delta <= MAX_HASH_TIME_DELTA:
                     h = hashlib.sha1(
                         str.encode("%s|%s|%s" % (str(freq1), str(freq2), str(t_delta))))
-                    yield (h.hexdigest()[0:FINGERPRINT_REDUCTION], t1)
+                    ccc = h.hexdigest()[0:FINGERPRINT_REDUCTION]
+                    print(ccc)
+                    print(t1)
+                    print('hashessss')
+
+                    yield (ccc, t1)

@@ -52,6 +52,8 @@ def commit(func):
         with session_withcommit() as session:
             a = func(**kwarg)
             session.add(a)
+        return session.query(songs).order_by(
+            songs.song_id.desc()).first().song_id
     return wrap
 
 
@@ -91,10 +93,8 @@ def get_songs():
             yield row
 
 
-def set_fingerprinted_flag():
+def set_fingerprinted_flag(id):
     with session_withcommit() as session:
-        id = session.query(songs).order_by(
-            songs.song_id.desc()).first().song_id
 
         session.query(songs).filter_by(
             song_id=id).first().fingerprinted = True
