@@ -8,6 +8,9 @@ import re
 import threading
 import time
 import glob
+
+from Metamusic import MetaMusic
+from Metamusic.recognize import FileRecognizer
 from mutagen.id3 import ID3, TYER
 
 lyrics_bool = False
@@ -17,6 +20,11 @@ url = 'https://itunes.apple.com/search'
 headers = {
     'Authorization': 'Bearer dp7sB4-Li2skNwHMdBuXz2yQYKm2moTTW7aVLI1yLBxVnB479rf3HFDJbB9hoDe0'}
 search_url = base_url + "/search"
+
+meta = MetaMusic(10)
+fileRecognizer = FileRecognizer(meta)
+loop = asyncio.new_event_loop()
+asyncio.set_event_loop(loop)
 
 
 async def main(song_name):
@@ -89,7 +97,6 @@ def process_init(path, app, db, folders):
         isFile = True
     with app.app_context():
         db.create_all()
-        print(os.path.dirname(path))
         for root in folders:
 
             for i in os.listdir(root):
@@ -114,33 +121,45 @@ def process_init(path, app, db, folders):
                         print("{0}{2} renamed to {1}{2}".format(
                             temp, i, ext))
 
-                    loop = asyncio.new_event_loop()
-                    asyncio.set_event_loop(loop)
                     datas = loop.run_until_complete(main(i))
+
+                    def checkDataStatus():  # check if datas dictionary has required object or not
+                        data = datas[0]['results'][0]
+                        genius_data = datas[1]["response"]["hits"][0]["result"]
+                        return data, genius_data
                     if datas == 0:
                         song_no += 1
                         continue
                     try:
-                        global lyrics_bool
-
-                        data = datas[0]['results'][0]
-                        genius_data = datas[1]["response"]["hits"][0]["result"]
-                        if data['artistName'].lower().strip() == genius_data['primary_artist']['name'].lower().strip():
-
-                            image_url = genius_data['song_art_image_thumbnail_url']
-                            lyrics_bool = False
-                        else:
-                            image_url = data['artworkUrl100']
-                            lyrics_bool = True
+                        data, genius_data = checkDataStatus()
 
                     except IndexError:
-                        print("Data related to {} was not found".format(i))
-                        fetched_data = fetcher_database(
-                            uid=song_no, status=False)
-                        db.session.add(fetched_data)
-                        db.session.commit()
-                        song_no += 1
-                        continue
+                        print("Searching Song's fingerprint")
+                        song = meta.recognize(
+                            fileRecognizer, os.path.join(root, i + ext))
+
+                        datas = loop.run_until_complete(
+                            main(song['song_name']))
+                        try:
+                            data, genius_data = checkDataStatus()
+                        except IndexError:
+                            print("Data related to {} was not found".format(i))
+                            fetched_data = fetcher_database(
+                                uid=song_no, status=False)
+                            db.session.add(fetched_data)
+                            db.session.commit()
+                            song_no += 1
+                            continue
+
+                    global lyrics_bool
+                    if data['artistName'].lower().strip() == genius_data['primary_artist']['name'].lower().strip():
+
+                        image_url = genius_data['song_art_image_thumbnail_url']
+                        lyrics_bool = False
+                    else:
+                        image_url = data['artworkUrl100']
+                        lyrics_bool = True
+
                     lyrics_url = genius_data['url']
                     releasedate = data["releaseDate"][0:4]
                     try:
