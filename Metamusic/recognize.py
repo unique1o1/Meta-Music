@@ -12,9 +12,8 @@ class BaseRecognizer(object):
     def _recognize(self, data):
         matches = []
         for d in data:
-            f = time.time()
             matches.extend(self.metaMusic.find_matches(d, Fs=self.Fs))
-            print(time.time()-f)
+
         return self.metaMusic.align_matches(matches)
 
     def recognize(self):
