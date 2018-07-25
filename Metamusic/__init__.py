@@ -117,8 +117,8 @@ class MetaMusic():
             database.set_fingerprinted_flag(sid)
 
     def recognize(self, recognizer, filename):
-        r = recognizer(self)
-        return r.recognize_file(filename)
+
+        return recognizer.recognize_file(filename)
 
     def find_matches(self, samples, Fs=fingerprint.DEFAULT_FS):
         hashes = fingerprint.fingerprint(samples, Fs=Fs)

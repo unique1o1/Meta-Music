@@ -34,6 +34,7 @@ if __name__ == '__main__':
         parser.print_help()
         sys.exit(0)
     meta = MetaMusic(12 if args.limit is None else int(args.limit))
+    fileRecognizer = FileRecognizer(meta)
     if args.fingerprint:
 
         filepath = args.fingerprint
@@ -55,7 +56,7 @@ if __name__ == '__main__':
             print(
                 "Please specify an file if you'd like to recognize the song")
             sys.exit(1)
-        song = meta.recognize(FileRecognizer, source)  # to be used later
+        song = meta.recognize(fileRecognizer, source)  # to be used later
         print(song)
 
     sys.exit(0)
