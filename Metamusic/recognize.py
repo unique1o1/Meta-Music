@@ -78,7 +78,7 @@ class MicrophoneRecognizer(BaseRecognizer):
         if not self.recorded:
             raise NoRecordingError("Recording was not complete/begun")
         data = self.myrecording.flatten()
-        data.dtype = np.int16
+
         for c in range(self.default_channels):
             self.data[c].extend(data[c::self.default_channels])
         # print(len(self.data[0]))

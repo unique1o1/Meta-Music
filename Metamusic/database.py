@@ -113,6 +113,21 @@ def delete_unfingerprinted_songs():
 # %%
 
 
+def get_num_fingerprints():
+    with session_withcommit() as session:
+        print(session.query(fingerprints).count())
+
+
+def get_num_of_songs():
+    with session_withcommit() as session:
+        print(session.query(songs).count())
+
+
+def get_num_fingerprints_by_id(sid):
+    with session_withcommit() as session:
+        print(session.query(fingerprints).filter_by(song_id=sid).count())
+
+
 @commit
 def insert_song(file_hash, song_name):
 
@@ -159,6 +174,6 @@ def return_matches(hashes):
     #         break
 
 
-def return_Matches_Pool(fingerprint):
-    return (fingerprint.song_id, fingerprint.offset,
-            binascii.hexlify(fingerprint.hash).decode('utf-8'))
+# def return_Matches_Pool(fingerprint):
+#     return (fingerprint.song_id, fingerprint.offset,
+#             binascii.hexlify(fingerprint.hash).decode('utf-8'))
