@@ -113,7 +113,7 @@ def get_2D_peaks(arr2D, plot=False, amp_min=DEFAULT_AMP_MIN):
     amps = arr2D[detected_peaks]
 
     j, i = np.where(detected_peaks)
-    print(np.sum(amps == 0))
+    # print(np.sum(amps == 0))
     # filter peaks
     amps = amps.flatten()
     peaks = zip(i, j, amps)
@@ -126,12 +126,12 @@ def get_2D_peaks(arr2D, plot=False, amp_min=DEFAULT_AMP_MIN):
         # scatter of the peaks
         fig, ax = plt.subplots()
 
-        ax.imshow(arr2D)
-        # ax.scatter(time_idx, frequency_idx)
-        # ax.set_xlabel('Time')
-        # ax.set_ylabel('Frequency')
-        # ax.set_title("Spectrogramarr2D = arr2D")
-        plt.gca().invert_yaxis()
+        # ax.imshow(arr2D)
+        ax.plot(arr2D)
+        ax.set_xlabel('Time')
+        ax.set_ylabel('Frequency')
+        ax.set_title("Spectrogramarr2D = arr2D")
+        # plt.gca().invert_yaxis()
         plt.show()
 
     return zip(frequency_idx, time_idx)
@@ -145,6 +145,7 @@ def generate_hashes(peaks, fan_value=DEFAULT_FAN_VALUE):
     """
     if PEAK_SORT:
         peaks = sorted(peaks, key=lambda x: x[1])
+        print(len(peaks))
         # peaks.sort(key=itemgetter(1))
 
     for i in range(len(peaks)):

@@ -137,7 +137,7 @@ def insert_song(file_hash, song_name):
 
 def insert_hashes(sid, hashes):
     with session_withcommit() as session:
-        for hash, offset in set(hashes):
+        for hash, offset in hashes:
             session.add(fingerprints(
                 hash=binascii.unhexlify(hash),
                 song_id=sid,
