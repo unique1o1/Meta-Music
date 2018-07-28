@@ -71,9 +71,6 @@ def fingerprint(channel_samples, Fs=DEFAULT_FS,
     FFT the channel, log transform output, find local maxima, then return
     locally sensitive hashes.
     # """
-    # print(len(channel_samples))
-
-    # print(channel_samples[0:22])
     # FFT the signal and extract frequency components
     arr2D = mlab.specgram(
         channel_samples,
@@ -82,6 +79,9 @@ def fingerprint(channel_samples, Fs=DEFAULT_FS,
         window=mlab.window_hanning,
         noverlap=int(wsize * wratio))[0]
 
+    # plt.plot(arr2D[1])
+    # plt.show()
+    # print(arr2D)
     # apply log transform since specgram() returns linear array
 
     arr2D = 10 * np.log10(arr2D)
@@ -103,21 +103,21 @@ def get_2D_peaks(arr2D, plot=False, amp_min=DEFAULT_AMP_MIN):
     # find local maxima using our fliter shape
     local_max = maximum_filter(arr2D, footprint=neighborhood) == arr2D
     background = (arr2D == 0)
-    eroded_background = binary_erosion(background, structure=neighborhood,
-                                       border_value=1)
+    # eroded_background = binary_erosion(background, structure=neighborhood,
+    #                                    border_value=1)
 
     # Boolean mask of arr2D with True at peaks
-    detected_peaks = local_max ^ eroded_background
+    detected_peaks = local_max ^ background
 
     # extract peaks
     amps = arr2D[detected_peaks]
-    j, i = np.where(detected_peaks)
 
+    j, i = np.where(detected_peaks)
+    print(np.sum(amps == 0))
     # filter peaks
     amps = amps.flatten()
     peaks = zip(i, j, amps)
     peaks_filtered = [x for x in peaks if x[2] > amp_min]  # freq, time, amp
-
     # get indices for frequency and time
     frequency_idx = [x[1] for x in peaks_filtered]
     time_idx = [x[0] for x in peaks_filtered]
@@ -125,12 +125,12 @@ def get_2D_peaks(arr2D, plot=False, amp_min=DEFAULT_AMP_MIN):
     if plot:
         # scatter of the peaks
         fig, ax = plt.subplots()
-        # print(arr2D)
+
         ax.imshow(arr2D)
-        ax.scatter(time_idx, frequency_idx)
-        ax.set_xlabel('Time')
-        ax.set_ylabel('Frequency')
-        ax.set_title("Spectrogram")
+        # ax.scatter(time_idx, frequency_idx)
+        # ax.set_xlabel('Time')
+        # ax.set_ylabel('Frequency')
+        # ax.set_title("Spectrogramarr2D = arr2D")
         plt.gca().invert_yaxis()
         plt.show()
 
@@ -160,4 +160,5 @@ def generate_hashes(peaks, fan_value=DEFAULT_FAN_VALUE):
                 if MIN_HASH_TIME_DELTA <= t_delta <= MAX_HASH_TIME_DELTA:
                     key = "{}|{}|{}".format(freq1, freq2, t_delta)
                     h = hashlib.sha1(key.encode('utf-8'))
+
                     yield (h.hexdigest()[0:FINGERPRINT_REDUCTION], t1)
