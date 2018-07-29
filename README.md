@@ -3,8 +3,8 @@
 Meta-Music is an open-source project that lets people add metadata to their Music library. 
 
 
- **Note: This branch uses audio recognition to find correct song names which were mismatched by the API provider. And since the audio recognition system only recognizes songs within the local database, its not ideal for real world use cases.
- Please refer to  [pypi_package](https://github.com/unique1o1/Meta-Music/tree/pypi_package) branch for your use.**
+ ***Note: This branch uses audio recognition to find correct song names which were mismatched by the API provider. And since the audio recognition system only recognizes songs within the local database, its not ideal for real world use cases.
+ Please refer to  [pypi_package](https://github.com/unique1o1/Meta-Music/tree/pypi_package) branch for your use.***
  
 
 # Quickstart
