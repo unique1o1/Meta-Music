@@ -16,6 +16,9 @@ WORKDIR /app
 ADD . /app
 
 # Using pip:
+RUN apt-get -y update
+RUN apt-get install -y libportaudio2 
+RUN apt-get install -y ffmpeg
 RUN python3 -m pip install -r requirements.txt
 CMD ["python3", "app.py"]
 
