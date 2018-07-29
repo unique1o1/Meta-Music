@@ -39,6 +39,20 @@ Meta-Music is an open-source project that lets people add metadata to their Musi
        
        docker inspect <your container's name> | grep -i 'ipaddress'  //to find your docker container's IP
        
+# Fingerprinting
+
+To start filling the database with your music's fingerprints follow the instruction below:
+       
+       python3.6 metamusic.py -l 10 -f /path/to/your/Music/file/or/directory
+# Recognizing from File
+       python3.6 metamusic.py -l 10 -r file /path/to/your/Music/file
+
+# Recognizing from Microphone
+       python3.6 metamusic.py -r mic 10
+       
+**Note: Recognizing from Microphone doesn't work for docker containers for now **
+
+
 # Demo
 
 ![demo](https://media.giphy.com/media/8PBFETWIZ39tme3vow/giphy.gif)
