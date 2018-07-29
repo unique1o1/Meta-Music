@@ -50,7 +50,7 @@ To start filling the database with your music's fingerprints follow the instruct
 # Recognizing from Microphone
        python3.6 metamusic.py -r mic 10
        
-**Note: Recognizing from Microphone doesn't work for docker containers for now **
+**Note: Recognizing from Microphone doesn't work for docker containers for now**
 
 
 # Demo
