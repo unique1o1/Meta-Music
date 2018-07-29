@@ -1,9 +1,11 @@
        
 # Meta-Music
-Meta-Music is an open-source project that lets people add metadata to their Music library.
+Meta-Music is an open-source project that lets people add metadata to their Music library. 
 
 
- **Note: This branch is not for your personal use. Please use the [pypi_package](https://github.com/unique1o1/Meta-Music/tree/pypi_package) branch for your use.**
+ **Note: This branch uses audio recognition to find correct song names which were mismatched by the API provider. And since the audio recognition system only recognizes songs within the local database, its not ideal for real world use cases.
+ Please refer to  [pypi_package](https://github.com/unique1o1/Meta-Music/tree/pypi_package) branch for your use.**
+ 
  
 # Installation from source:
 
@@ -14,14 +16,21 @@ Meta-Music is an open-source project that lets people add metadata to their Musi
         pip install -r requirements
         python app.py
         npm run watch
-        
-# Using PIP
-        sudo pip install MetaMusic
-        meta-music
-        # Or
-        meta-music /path/to/music.mp3
-        
+
+# Database Setup
+### Database Configuration 
+
+       $ nano Metamusic/config
+       
+### Database Creation
+
+       $ python3.6
+       >>> from Metamusic import database
+       >>> database.metadata.create_all()
+   
+       
 # Using docker
+
        cd Meta-Music
        docker build -t meta-music:latest . 
        docker run --rm -ti -v /your/local/pathto/Music:/music meta-music:latest
