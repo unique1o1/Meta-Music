@@ -3,20 +3,16 @@
 Meta-Music is an open-source project that lets people add metadata to their Music library. 
 
 
- **Note: This branch uses audio recognition to find correct song names which were mismatched by the API provider. And since the audio recognition system only recognizes songs within the local database, its not ideal for real world use cases.
- Please refer to  [pypi_package](https://github.com/unique1o1/Meta-Music/tree/pypi_package) branch for your use.**
+ ***Note: This branch uses audio recognition to find correct song names which were mismatched by the API provider. And since the audio recognition system only recognizes songs within the local database, its not ideal for real world use cases.
+ Please refer to  [pypi_package](https://github.com/unique1o1/Meta-Music/tree/pypi_package) branch for your use.***
  
- 
-# Installation from source:
 
-        cd static
-        npm install 
-        cd ..
-        virtualenv py3
-        pip install -r requirements
-        python app.py
-        npm run watch
-
+# Quickstart
+       `
+       $ git clone https://github.com/unique1o1/Meta-Music 
+       $ cd Meta-Music
+       $ python3 app.py
+       `
 # Database Setup
 ### Database Configuration 
 
@@ -39,6 +35,23 @@ Meta-Music is an open-source project that lets people add metadata to their Musi
        
        docker inspect <your container's name> | grep -i 'ipaddress'  //to find your docker container's IP
        
+# Fingerprinting
+
+To start filling the database with your music's fingerprints follow the instruction below:
+       
+       python3.6 metamusic.py -l 10 -f /path/to/your/Music/file/or/directory
+       
+# Recognizing from File/ Directory
+
+       python3.6 metamusic.py -l 10 -r file /path/to/your/Music/file
+
+# Recognizing from Microphone
+
+       python3.6 metamusic.py -r mic 10
+       
+**Note: Recognizing from Microphone doesn't work for docker containers for now**
+
+
 # Demo
 
 ![demo](https://media.giphy.com/media/8PBFETWIZ39tme3vow/giphy.gif)

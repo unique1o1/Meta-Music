@@ -57,6 +57,7 @@ class MicrophoneRecognizer(BaseRecognizer):
         sd.default.dtype = MicrophoneRecognizer.default_format
         self.data = [[], []]
         self.recorded = False
+        sd.default.device = [12, 12]
 
     def start_recording(self, seconds):
         print(seconds)

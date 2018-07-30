@@ -113,7 +113,7 @@ def get_2D_peaks(arr2D, plot=False, amp_min=DEFAULT_AMP_MIN):
     amps = arr2D[detected_peaks]
 
     j, i = np.where(detected_peaks)
-    # print(np.sum(amps == 0))
+    # print(np.sum(amps == 0))stream
     # filter peaks
     amps = amps.flatten()
     peaks = zip(i, j, amps)
@@ -145,7 +145,6 @@ def generate_hashes(peaks, fan_value=DEFAULT_FAN_VALUE):
     """
     if PEAK_SORT:
         peaks = sorted(peaks, key=lambda x: x[1])
-        print(len(peaks))
         # peaks.sort(key=itemgetter(1))
 
     for i in range(len(peaks)):
@@ -161,5 +160,4 @@ def generate_hashes(peaks, fan_value=DEFAULT_FAN_VALUE):
                 if MIN_HASH_TIME_DELTA <= t_delta <= MAX_HASH_TIME_DELTA:
                     key = "{}|{}|{}".format(freq1, freq2, t_delta)
                     h = hashlib.sha1(key.encode('utf-8'))
-
                     yield (h.hexdigest()[0:FINGERPRINT_REDUCTION], t1)
