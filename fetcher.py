@@ -52,7 +52,7 @@ def sync_data(data, image_url, lyrics_url, song_path):
     if lyrics_bool:  # if itunes and genius dont match the song and artist
         try:
             data_ = {'q': data['trackName'] + ' ' + data['artistName']}
-            print(data['trackName'] + ' ' + data['artistName'])
+
             genius = requests.get(search_url, params=data_,
                                   headers=headers).json()
 
@@ -124,6 +124,7 @@ def process_init(path, app, db, folders):
                     datas = loop.run_until_complete(main(i))
 
                     def checkDataStatus():  # check if datas dictionary has required object or not
+
                         data = datas[0]['results'][0]
                         genius_data = datas[1]["response"]["hits"][0]["result"]
                         return data, genius_data
@@ -137,11 +138,19 @@ def process_init(path, app, db, folders):
                         print("Searching Song's fingerprint")
                         song = meta.recognize(
                             fileRecognizer, os.path.join(root, i + ext))
-
-                        datas = loop.run_until_complete(
-                            main(song['song_name']))
+                        print(song)
                         try:
+                            if song['confidence'] < 300:
+                                raise IndexError
+
+                            os.rename(os.path.join(root, i + ext),
+                                      os.path.join(root, song['song_name'] + ext))
+                            i = song['song_name']
+                            datas = loop.run_until_complete(
+                                main(song['song_name']))
+
                             data, genius_data = checkDataStatus()
+
                         except IndexError:
                             print("Data related to {} was not found".format(i))
                             fetched_data = fetcher_database(
@@ -150,6 +159,9 @@ def process_init(path, app, db, folders):
                             db.session.commit()
                             song_no += 1
                             continue
+                        except Exception as e:
+                            print(e)
+
 
                     global lyrics_bool
                     if data['artistName'].lower().strip() == genius_data['primary_artist']['name'].lower().strip():
