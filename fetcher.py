@@ -21,7 +21,7 @@ headers = {
     'Authorization': 'Bearer dp7sB4-Li2skNwHMdBuXz2yQYKm2moTTW7aVLI1yLBxVnB479rf3HFDJbB9hoDe0'}
 search_url = base_url + "/search"
 
-meta = MetaMusic(10)
+meta = MetaMusic(5)
 fileRecognizer = FileRecognizer(meta)
 loop = asyncio.new_event_loop()
 asyncio.set_event_loop(loop)
@@ -48,18 +48,6 @@ async def main(song_name):
 
 
 def sync_data(data, image_url, lyrics_url, song_path):
-    global lyrics_bool, base_url, url, headers, search_url
-    if lyrics_bool:  # if itunes and genius dont match the song and artist
-        try:
-            data_ = {'q': data['trackName'] + ' ' + data['artistName']}
-
-            genius = requests.get(search_url, params=data_,
-                                  headers=headers).json()
-
-            lyrics_url = genius["response"]["hits"][0]["result"]['url']
-            print('inside')
-        except IndexError:
-            print("indexerror")
     page = requests.get(lyrics_url)
     html = BeautifulSoup(page.text, "html.parser")
     lyrics_ = html.find("div", class_="lyrics").get_text()
@@ -85,10 +73,10 @@ def sync_data(data, image_url, lyrics_url, song_path):
 
     audiofile.tag.save()
 
-    print(song_path, data["artistName"])
+    print(song_path+" tagged")
 
 
-def process_init(path, app, db, folders):
+def process_init(path, app, db, folders, total_songs):
     song_no = 0
     total_managed = 0
     isFile = False
@@ -123,24 +111,31 @@ def process_init(path, app, db, folders):
 
                     datas = loop.run_until_complete(main(i))
 
-                    def checkDataStatus():  # check if datas dictionary has required object or not
+                    # check if datas dictionary has required object or not
+                    def checkDataStatus(val):
 
                         data = datas[0]['results'][0]
                         genius_data = datas[1]["response"]["hits"][0]["result"]
+                        if val and data['artistName'].lower().strip() != genius_data['primary_artist']['name'].lower().strip():
+                            print(data['artistName'].lower().strip(
+                            ) + "and"+genius_data['primary_artist']['name'].lower().strip())
+                            raise IndexError
                         return data, genius_data
                     if datas == 0:
                         song_no += 1
                         continue
                     try:
-                        data, genius_data = checkDataStatus()
+                        # argument 1 for checking data without AudioRecognition
+                        data, genius_data = checkDataStatus(1)
 
                     except IndexError:
-                        print("Searching Song's fingerprint")
+                        print("Searching Song's fingerprint " +
+                              os.path.join(root, i + ext))
                         song = meta.recognize(
                             fileRecognizer, os.path.join(root, i + ext))
                         print(song)
                         try:
-                            if song['confidence'] < 300:
+                            if song is None or song['confidence'] < 200:
                                 raise IndexError
 
                             os.rename(os.path.join(root, i + ext),
@@ -149,7 +144,8 @@ def process_init(path, app, db, folders):
                             datas = loop.run_until_complete(
                                 main(song['song_name']))
 
-                            data, genius_data = checkDataStatus()
+                            # argument 0 for checking data without AudioRecognition
+                            data, genius_data = checkDataStatus(0)
 
                         except IndexError:
                             print("Data related to {} was not found".format(i))
@@ -161,16 +157,9 @@ def process_init(path, app, db, folders):
                             continue
                         except Exception as e:
                             print(e)
+                            continue
 
-
-                    global lyrics_bool
-                    if data['artistName'].lower().strip() == genius_data['primary_artist']['name'].lower().strip():
-
-                        image_url = genius_data['song_art_image_thumbnail_url']
-                        lyrics_bool = False
-                    else:
-                        image_url = data['artworkUrl100']
-                        lyrics_bool = True
+                    image_url = genius_data['song_art_image_thumbnail_url']
 
                     lyrics_url = genius_data['url']
                     releasedate = data["releaseDate"][0:4]
@@ -197,5 +186,6 @@ def process_init(path, app, db, folders):
         time.sleep(4)
         db.session.query(fetcher_database).delete()
         db.session.commit()
-        print("{} out of {} songs were managed".format(total_managed, song_no))
+        print("{} out of {} songs were managed".format(
+            total_managed, total_songs))
         print((time.time() - timeit) - 3)

@@ -56,7 +56,7 @@ def process():
         p.join()
 
         t = multiprocessing.Process(
-            target=process_init, args=(path, app, db, folders))
+            target=process_init, args=(path, app, db, folders, total_songs))
     else:
         total_songs = 1
         folders = [os.path.dirname(path)]

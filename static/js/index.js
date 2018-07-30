@@ -14,14 +14,13 @@ window.onload = function me() {
   elem.style.width = "0%";
   elem.style.height = "0%";
   elem.style.borderRadius = "25px";
-
 };
 var myworker = new Worker("dist/Worker.js");
 
 myworker.postMessage(songs);
 console.log(myworker);
-
-myworker.onmessage = function (Data) {
+var songsManaged = 0;
+myworker.onmessage = function(Data) {
   const song_count = document.getElementById("totalsongs").value;
   const id = "id" + Data.data.uid; //or some such identifier
   const d = document.createElement("div");
@@ -30,16 +29,15 @@ myworker.onmessage = function (Data) {
   d.className = "fadein_slowly";
   theclass.appendChild(d);
 
-  console.log(Data.data.uid);
-  console.log("songcount");
   ReactDOM.render(
     <App songno={Data.data.uid} data={Data.data} />,
     document.getElementById(id)
   );
-
+  console.log("managed");
+  songsManaged++;
   ReactDOM.render(
     <span style={{ fontSize: 15 }}>
-      {Data.data.uid + 1} of <b>{song_count}</b>
+      {songsManaged} of <b>{song_count}</b>
     </span>,
     document.getElementById("index_count")
   );

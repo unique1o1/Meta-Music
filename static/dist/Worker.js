@@ -11,7 +11,7 @@ this.onmessage = function(songs) {
       // console.log(JSON.parse(request.responseText));
       this.postMessage(JSON.parse(request.responseText));
     } else {
-      console.log("no data for " + i);
+      console.log("no data for " + i + 1);
     }
   }
 };
