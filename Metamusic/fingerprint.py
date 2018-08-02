@@ -142,8 +142,6 @@ def generate_hashes(peaks, fan_value=DEFAULT_FAN_VALUE):
         peaks = sorted(peaks, key=lambda x: x[1])
         # peaks.sort(key=itemgetter(1))
 
-    plt.plot([i[1] for i in peaks], [i[0] for i in peaks])
-    plt.show()
     for i in range(len(peaks)):
         for j in range(1, fan_value):
             if (i + j) < len(peaks):

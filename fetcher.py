@@ -130,10 +130,10 @@ def process_init(path, app, db, folders, total_songs):
 
                     except IndexError:
                         print(colored("Searching Song's fingerprint " +
-                                      os.path.join(root, i + ext), "purple"))
+                                      os.path.join(root, i + ext), "blue"))
                         song = meta.recognize(
                             fileRecognizer, os.path.join(root, i + ext))
-                        print(colored('Done','purple'))
+                        print(colored('Done', 'blue'))
                         try:
                             if song is None or song['confidence'] < 200:
                                 raise IndexError
