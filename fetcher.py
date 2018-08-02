@@ -3,6 +3,8 @@ import requests
 from model import fetcher_database
 import eyed3
 import asyncio
+from termcolor import colored
+
 from bs4 import BeautifulSoup
 import re
 import threading
@@ -73,8 +75,6 @@ def sync_data(data, image_url, lyrics_url, song_path):
 
     audiofile.tag.save()
 
-    print(song_path+" tagged")
-
 
 def process_init(path, app, db, folders, total_songs):
     song_no = 0
@@ -118,7 +118,7 @@ def process_init(path, app, db, folders, total_songs):
                         genius_data = datas[1]["response"]["hits"][0]["result"]
                         if val and data['artistName'].lower().strip() != genius_data['primary_artist']['name'].lower().strip():
                             print(data['artistName'].lower().strip(
-                            ) + "and"+genius_data['primary_artist']['name'].lower().strip())
+                            ) + " and "+genius_data['primary_artist']['name'].lower().strip())
                             raise IndexError
                         return data, genius_data
                     if datas == 0:
@@ -129,11 +129,11 @@ def process_init(path, app, db, folders, total_songs):
                         data, genius_data = checkDataStatus(1)
 
                     except IndexError:
-                        print("Searching Song's fingerprint " +
-                              os.path.join(root, i + ext))
+                        print(colored("Searching Song's fingerprint " +
+                                      os.path.join(root, i + ext), "purple"))
                         song = meta.recognize(
                             fileRecognizer, os.path.join(root, i + ext))
-                        print(song)
+                        print(colored('Done','purple'))
                         try:
                             if song is None or song['confidence'] < 200:
                                 raise IndexError
@@ -148,7 +148,8 @@ def process_init(path, app, db, folders, total_songs):
                             data, genius_data = checkDataStatus(0)
 
                         except IndexError:
-                            print("Data related to {} was not found".format(i))
+                            print(
+                                colored("Data related to {} was not found".format(i), 'red'))
                             fetched_data = fetcher_database(
                                 uid=song_no, status=False)
                             db.session.add(fetched_data)

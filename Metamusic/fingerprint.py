@@ -79,11 +79,6 @@ def fingerprint(channel_samples, Fs=DEFAULT_FS,
         window=mlab.window_hanning,
         noverlap=int(wsize * wratio))[0]
 
-    # plt.plot(arr2D[1])
-    # plt.show()
-    # print(arr2D)
-    # apply log transform since specgram() returns linear array
-
     arr2D = 10 * np.log10(arr2D)
 
     arr2D[arr2D == -np.inf] = 0  # replace infs with zeros
@@ -147,6 +142,8 @@ def generate_hashes(peaks, fan_value=DEFAULT_FAN_VALUE):
         peaks = sorted(peaks, key=lambda x: x[1])
         # peaks.sort(key=itemgetter(1))
 
+    plt.plot([i[1] for i in peaks], [i[0] for i in peaks])
+    plt.show()
     for i in range(len(peaks)):
         for j in range(1, fan_value):
             if (i + j) < len(peaks):
