@@ -4,11 +4,11 @@ import numpy as np
 from pydub import AudioSegment
 from pydub.utils import audioop
 from hashlib import sha1
+from typing import Tuple, Optional
 
 
-def unique_hash(filepath, blocksize=80):
-    """ Small function to generate a hash to uniquely generate
-    a file.
+def unique_hash(filepath: str, blocksize=80)->str:
+    """ Small function to generate a hash to uniquely generate a file.
     Default blocksize is `500`
     """
     s = sha1()
@@ -18,7 +18,7 @@ def unique_hash(filepath, blocksize=80):
     return s.hexdigest()
 
 
-def read(filename, limit=None):
+def read(filename: str, limit: Optional[int]=None) -> Tuple[list, int]:
     """
     Reads any file supported by pydub (ffmpeg) and returns the data contained
     within.
