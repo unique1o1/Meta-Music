@@ -6,9 +6,10 @@ import traceback
 import sys
 from Metamusic import decoder
 from Metamusic import fingerprint
-from sqlalchemy import func
 
+from Metamusic.recognize import FileRecognizer, MicrophoneRecognizer
 import binascii
+from typing import Union, Iterator, Optional
 
 
 class MetaMusic():
@@ -20,7 +21,7 @@ class MetaMusic():
     OFFSET = 'offset'
     OFFSET_SECS = 'offset_seconds'
 
-    def __init__(self, limit):
+    def __init__(self, limit: int)->None:
         database.delete_unfingerprinted_songs()
         self.limit = limit
         self.get_fingerprinted_songs()
@@ -33,7 +34,7 @@ class MetaMusic():
             self.songhashes_set.add(binascii.hexlify(
                 song.file_sha1).decode('utf-8'))
 
-    def fingerprint_directory(self, path, nprocesses=None):
+    def fingerprint_directory(self, path: str, nprocesses: int=None)->None:
 
         # Try to use the maximum amount of processes if not given.
         try:
@@ -100,7 +101,7 @@ class MetaMusic():
         pool.close()
         pool.join()
 
-    def fingerprint_file(self, filepath):
+    def fingerprint_file(self, filepath: str)->None:
         songname = decoder.path_to_songname(filepath)
         file_hash = decoder.unique_hash(filepath)
         print(type(file_hash))
@@ -116,22 +117,21 @@ class MetaMusic():
 
             database.set_fingerprinted_flag(sid)
 
-    def recognize(self, recognizer, *options, **kwoptions):
-
+    def recognize(self, recognizer: Union[FileRecognizer, MicrophoneRecognizer], *options, **kwoptions)->dict:
         return recognizer.recognize(*options, **kwoptions)
 
-    def find_matches(self, samples, Fs=fingerprint.DEFAULT_FS):
-        hashes = fingerprint.fingerprint(samples, Fs=Fs)
+    def find_matches(self, samples: list, Fs: int =fingerprint.DEFAULT_FS)->Iterator[tuple]:
+        hashes: Iterator = fingerprint.fingerprint(samples, Fs=Fs)
         return database.return_matches(hashes)
 
-    def align_matches(self, matches):
+    def align_matches(self, matches: list)->Optional[dict]:
         """
             Finds hash matches that align in time with other matches and finds
             consensus about which hashes are "true" signal from the audio.
             Returns a dictionary with match information.
         """
         # align by diffs
-        diff_counter = {}
+        diff_counter: dict = {}
         largest = 0
         largest_count = 0
         song_id = -1
@@ -172,7 +172,7 @@ class MetaMusic():
         return song
 
 
-def _fingerprint_worker(filename):
+def _fingerprint_worker(filename: tuple)->tuple:
     # Pool.imap sends arguments as tuples so we have to unpack
     # them ourself.
     try:
@@ -184,7 +184,7 @@ def _fingerprint_worker(filename):
     songname, extension = os.path.splitext(os.path.basename(filename))
     song_name = song_name or songname
     channels, Fs = decoder.read(filename, limit)
-    result = set()
+    result: set = set()
     channel_amount = len(channels)
 
     for channeln, channel in enumerate(channels):
@@ -193,7 +193,7 @@ def _fingerprint_worker(filename):
                                                        channel_amount,
                                                        filename))
         hashes = fingerprint.fingerprint(channel, Fs=Fs)
-        print()
+
         print("Finished channel %d/%d for %s" % (channeln + 1, channel_amount,
                                                  filename))
         result |= set(hashes)

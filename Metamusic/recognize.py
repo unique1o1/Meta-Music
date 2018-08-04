@@ -7,6 +7,7 @@ import sounddevice as sd
 
 
 class BaseRecognizer(object):
+
     def __init__(self, metaMusic):
         self.metaMusic = metaMusic
         self.Fs = 44100
