@@ -8,6 +8,7 @@ from contextlib import contextmanager
 import json
 import sys
 import time
+from typing import Iterator
 from itertools import zip_longest
 import binascii
 FINGERPRINTS_TABLENAME = "fingerprints"
@@ -85,12 +86,12 @@ class fingerprints(Base):
     # %%
 
 
-def get_song_by_id(sid):
+def get_song_by_id(sid: int)->songs:
     session = Session()
     return session.query(songs).filter(songs.song_id == sid).one_or_none()
 
 
-def get_songs():
+def get_songs()->Iterator:
     """
     Return songs that have the fingerprinted flag set TRUE (1).
     """
@@ -100,42 +101,42 @@ def get_songs():
             yield row
 
 
-def set_fingerprinted_flag(id):
+def set_fingerprinted_flag(id)->None:
     with session_withcommit() as session:
 
         session.query(songs).filter_by(
             song_id=id).first().fingerprinted = True
 
 
-def delete_unfingerprinted_songs():
+def delete_unfingerprinted_songs()->None:
     with session_withcommit() as session:
         session.query(songs).filter_by(fingerprinted=False).delete()
 # %%
 
 
-def get_num_fingerprints():
+def get_num_fingerprints()->None:
     with session_withcommit() as session:
         print(session.query(fingerprints).count())
 
 
-def get_num_of_songs():
+def get_num_of_songs()->None:
     with session_withcommit() as session:
         print(session.query(songs).count())
 
 
-def get_num_fingerprints_by_id(sid):
+def get_num_fingerprints_by_id(sid: int)->None:
     with session_withcommit() as session:
         print(session.query(fingerprints).filter_by(song_id=sid).count())
 
 
 @commit
-def insert_song(file_hash, song_name):
+def insert_song(file_hash: str, song_name: str)->songs:
 
     # print(binascii.unhexlify(hashes_sha1[num]))
     return songs(song_name=song_name, file_sha1=binascii.unhexlify(file_hash))
 
 
-def insert_hashes(sid, hashes):
+def insert_hashes(sid: int, hashes: set):
     with session_withcommit() as session:
         for hash, offset in hashes:
             session.add(fingerprints(
@@ -145,9 +146,9 @@ def insert_hashes(sid, hashes):
             ))
 
 
-def return_matches(hashes):
+def return_matches(hashes: Iterator)->Iterator:
 
-        # Create a dictionary of hash => offset pairs for later lookups
+    # Create a dictionary of hash => offset pairs for later lookups
     mapper = {}
     values = []
     for hash, offset in hashes:
