@@ -1,5 +1,4 @@
 import os
-import fnmatch
 import numpy as np
 from pydub import AudioSegment
 from pydub.utils import audioop
@@ -41,7 +40,7 @@ def read(filename: str, limit: Optional[int]=None) -> Tuple[list, int]:
     return channels, fs
 
 
-def path_to_songname(path):
+def path_to_songname(path: str)->str:
     """
     Extracts song name from a filepath. Used to identify which songs
     have already been fingerprinted on disk.
