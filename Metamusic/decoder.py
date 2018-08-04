@@ -1,12 +1,12 @@
 import os
 import numpy as np
 from pydub import AudioSegment
-from pydub.utils import audioop
+from pydub.utils import audioops
 from hashlib import sha1
 from typing import Tuple, Optional
 
 
-def unique_hash(filepath: str, blocksize:int=80)->str:
+def unique_hash(filepath: str, blocksize: int=80)->str:
     """ Small function to generate a hash to uniquely generate a file.
     Default blocksize is `500`
     """
