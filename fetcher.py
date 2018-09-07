@@ -4,7 +4,6 @@ from model import fetcher_database
 import eyed3
 import asyncio
 from termcolor import colored
-
 from bs4 import BeautifulSoup
 import re
 import threading
@@ -15,13 +14,12 @@ from Metamusic import MetaMusic
 from Metamusic.recognize import FileRecognizer
 from mutagen.id3 import ID3, TYER
 
-lyrics_bool = False
 
-base_url = "http://api.genius.com"
+
 url = 'https://itunes.apple.com/search'
 headers = {
     'Authorization': 'Bearer dp7sB4-Li2skNwHMdBuXz2yQYKm2moTTW7aVLI1yLBxVnB479rf3HFDJbB9hoDe0'}
-search_url = base_url + "/search"
+search_url = "http://api.genius.com/search"
 
 meta = MetaMusic(5)
 fileRecognizer = FileRecognizer(meta)
@@ -30,7 +28,7 @@ asyncio.set_event_loop(loop)
 
 
 async def main(song_name):
-    global base_url, url, headers, search_url
+    global url, headers, search_url
     data = {'q': song_name}
 
     loop = asyncio.get_event_loop()
@@ -118,7 +116,7 @@ def process_init(path, app, db, folders, total_songs):
                         genius_data = datas[1]["response"]["hits"][0]["result"]
                         if val and data['artistName'].lower().strip() != genius_data['primary_artist']['name'].lower().strip():
                             print(data['artistName'].lower().strip(
-                            ) + " and "+genius_data['primary_artist']['name'].lower().strip())
+                            ) + " and "+ genius_data['primary_artist']['name'].lower().strip())
                             raise IndexError
                         return data, genius_data
                     if datas == 0:
