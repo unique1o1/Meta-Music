@@ -98,6 +98,7 @@ class MetaMusic():
                 database.insert_hashes(sid, song_hashes)
 
                 database.set_fingerprinted_flag(sid)
+                print('ssssssssssss')
         pool.close()
         pool.join()
 
@@ -121,7 +122,7 @@ class MetaMusic():
         return recognizer.recognize(*options, **kwoptions)
 
     def find_matches(self, samples: list, Fs: int =fingerprint.DEFAULT_FS)->Iterator[tuple]:
-        hashes: Iterator = fingerprint.fingerprint(samples, Fs=Fs)
+        hashes : Iterator =   fingerprint.fingerprint(samples, Fs=Fs)
         return database.return_matches(hashes)
 
     def align_matches(self, matches: list)->Optional[dict]:

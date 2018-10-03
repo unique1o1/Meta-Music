@@ -2,14 +2,13 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-# from multiprocessing import Pool, cpu_count, TimeoutError
 from sqlalchemy import Column, Integer, String, Binary, Boolean, ForeignKey
 from contextlib import contextmanager
 import json
+import requests
 import sys
 import time
 from typing import Iterator
-from itertools import zip_longest
 import binascii
 FINGERPRINTS_TABLENAME = "fingerprints"
 SONGS_TABLENAME = "songs"
@@ -103,7 +102,6 @@ def get_songs()->Iterator:
 
 def set_fingerprinted_flag(id)->None:
     with session_withcommit() as session:
-
         session.query(songs).filter_by(
             song_id=id).first().fingerprinted = True
 
@@ -111,7 +109,6 @@ def set_fingerprinted_flag(id)->None:
 def delete_unfingerprinted_songs()->None:
     with session_withcommit() as session:
         session.query(songs).filter_by(fingerprinted=False).delete()
-# %%
 
 
 def get_num_fingerprints()->None:

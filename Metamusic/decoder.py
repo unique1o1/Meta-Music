@@ -1,7 +1,6 @@
 import os
 import numpy as np
 from pydub import AudioSegment
-from pydub.utils import audioops
 from hashlib import sha1
 from typing import Tuple, Optional
 
