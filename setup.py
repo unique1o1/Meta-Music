@@ -72,7 +72,7 @@ def parse_requirements(requirements):
 REQUIREMENTS = parse_requirements("requirements.txt")
 setuptools.setup(
     name="MetaMusic",
-    version="1.1.7",
+    version="1.1.7.1",
     url="https://github.com/unique1o1/Meta-Music",
     author="Yunik Maharjan",
     author_email="yunik.maharjan@icloud.com",
