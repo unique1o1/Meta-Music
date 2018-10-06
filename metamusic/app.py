@@ -79,6 +79,7 @@ def fetch(no):
         return_data = fetcher_database.query.filter_by(uid=no).first()
     if not return_data.status:
         return abort(404)
+   
     return jsonify(trackname=return_data.trackname, tracknumber=return_data.tracknumber, albumname=return_data.albumname, image_url=return_data.image_url, releasedate=return_data.releasedate,
                    genre=return_data.genre, artistname=return_data.artistname, uid=return_data.uid, loading=True)
 
@@ -88,11 +89,6 @@ def f(n):
         return 1
     else:
         return 0
-
-
-@app.errorhandler(404)
-def page_not_found(e):
-    return render_template("nofile.html")
 
 
 def run():
