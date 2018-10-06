@@ -8,6 +8,8 @@ EXPOSE 5000
 ADD ./requirements.txt /app/requirements.txt
 
 WORKDIR /app
+
+
 RUN apt-get -y update
 RUN apt-get install -y ffmpeg
 RUN apt-get install -y libportaudio2 
