@@ -111,4 +111,4 @@ def run():
             raise ValueError("The path/ file you entered doesn't exit")
     else:
         webbrowser.open('http://127.0.0.1:5999/')
-        app.run(threaded=True, port=5999)
+        app.run(threaded=True,  host='0.0.0.0',port=5999)
