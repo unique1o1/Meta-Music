@@ -1,9 +1,9 @@
        
 # Meta-Music
-Meta-Music is an open-source project that lets people add metadata to their Music library. 
+Meta-Music is an open-source project that lets people add metadata to their Music library using audio recognition system for accurate retrival of data incase of mismatched song names. 
 
 
- ***Note: This branch uses audio recognition to find correct song names which were mismatched by the API provider. And since the audio recognition system only recognizes songs within the local database, its not ideal for real world use cases.
+ ***Note: since, this branch uses audio recognition to find correct song names which were mismatched by the API provider. And  the audio recognition system only recognizes songs within the local database, its not ideal for real world use cases.
  Please refer to  [pypi_package](https://github.com/unique1o1/Meta-Music/tree/pypi_package) branch for your use.***
  
 
@@ -35,6 +35,8 @@ Meta-Music is an open-source project that lets people add metadata to their Musi
        
        docker inspect <your container's name> | grep -i 'ipaddress'  //to find your docker container's IP
        
+
+
 # Fingerprinting
 
 To start filling the database with your music's fingerprints follow the instruction below:
@@ -50,6 +52,18 @@ To start filling the database with your music's fingerprints follow the instruct
        python3.6 metamusic.py -r mic 10
        
 **Note: Recognizing from Microphone doesn't work for docker containers for now**
+## Tuning
+
+Inside `Metamusic/fingerprint.py`, you may want to adjust following parameters.
+
+    FINGERPRINT_REDUCTION 
+    PEAK_SORT 
+    DEFAULT_OVERLAP_RATIO 
+    DEFAULT_FAN_VALUE 
+    DEFAULT_AMP_MIN 
+    PEAK_NEIGHBORHOOD_SIZE 
+    
+These parameters are described in the `Metamusic/fingerprint.py` in detail. Read that in-order to understand the impact of changing these values.
 
 
 # Demo
