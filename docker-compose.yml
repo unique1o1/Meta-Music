@@ -1,8 +1,0 @@
-version: '2.1'
-
-services:
-  meta-music:
-    image: meta-music
-    build: .
-    ports:
-      - 5000:5000
