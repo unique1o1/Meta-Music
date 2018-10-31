@@ -11,6 +11,7 @@ Meta-Music is an open-source project that lets people add metadata to their Musi
        `
        $ git clone https://github.com/unique1o1/Meta-Music 
        $ cd Meta-Music
+       $ sudo pip install -r requirements.txt
        $ python3 app.py
        `
 # Database Setup
