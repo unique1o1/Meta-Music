@@ -32,4 +32,4 @@ SQLAlchemy==1.2.3
 urllib3==1.22
 Werkzeug==0.14.1
 sounddevice==0.3.11
-
+termcolor
