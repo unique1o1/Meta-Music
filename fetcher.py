@@ -1,3 +1,6 @@
+from mutagen.id3 import ID3, TYER
+from Metamusic.recognize import FileRecognizer
+from Metamusic import MetaMusic
 import os
 import requests
 from model import fetcher_database
@@ -8,12 +11,6 @@ from bs4 import BeautifulSoup
 import re
 import threading
 import time
-import glob
-
-from Metamusic import MetaMusic
-from Metamusic.recognize import FileRecognizer
-from mutagen.id3 import ID3, TYER
-
 
 
 url = 'https://itunes.apple.com/search'
@@ -116,7 +113,7 @@ def process_init(path, app, db, folders, total_songs):
                         genius_data = datas[1]["response"]["hits"][0]["result"]
                         if val and data['artistName'].lower().strip() != genius_data['primary_artist']['name'].lower().strip():
                             print(data['artistName'].lower().strip(
-                            ) + " and "+ genius_data['primary_artist']['name'].lower().strip())
+                            ) + " and " + genius_data['primary_artist']['name'].lower().strip())
                             raise IndexError
                         return data, genius_data
                     if datas == 0:

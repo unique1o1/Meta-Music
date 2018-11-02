@@ -3,9 +3,8 @@ import matplotlib.mlab as mlab
 import matplotlib.pyplot as plt
 from scipy.ndimage.filters import maximum_filter
 from scipy.ndimage.morphology import (generate_binary_structure,
-                                      iterate_structure, binary_erosion)
+                                      iterate_structure)
 import hashlib
-from operator import itemgetter
 from typing import Union, Iterator, Tuple
 IDX_FREQ_I = 0
 IDX_TIME_J = 1
@@ -62,11 +61,11 @@ PEAK_SORT = True
 FINGERPRINT_REDUCTION = 20
 
 
-def fingerprint(channel_samples: list, Fs: int=DEFAULT_FS,
-                wsize: int=DEFAULT_WINDOW_SIZE,
-                wratio: Union[int, float]=DEFAULT_OVERLAP_RATIO,
-                fan_value: int=DEFAULT_FAN_VALUE,
-                amp_min: Union[int, float]=DEFAULT_AMP_MIN)-> Iterator[tuple]:
+def fingerprint(channel_samples: list, Fs: int = DEFAULT_FS,
+                wsize: int = DEFAULT_WINDOW_SIZE,
+                wratio: Union[int, float] = DEFAULT_OVERLAP_RATIO,
+                fan_value: int = DEFAULT_FAN_VALUE,
+                amp_min: Union[int, float] = DEFAULT_AMP_MIN)-> Iterator[tuple]:
     """
     FFT the channel, log transform output, find local maxima, then return
     locally sensitive hashes.
@@ -90,7 +89,7 @@ def fingerprint(channel_samples: list, Fs: int=DEFAULT_FS,
     return generate_hashes(local_maxima, fan_value=fan_value)
 
 
-def get_2D_peaks(arr2D: np.array, plot: bool=False, amp_min: Union[int, float]=DEFAULT_AMP_MIN)->Iterator:
+def get_2D_peaks(arr2D: np.array, plot: bool = False, amp_min: Union[int, float] = DEFAULT_AMP_MIN)->Iterator:
     # http://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.morphology.iterate_structure.html#scipy.ndimage.morphology.iterate_structure
     struct = generate_binary_structure(2, 1)
     neighborhood = iterate_structure(struct, PEAK_NEIGHBORHOOD_SIZE)
@@ -132,7 +131,7 @@ def get_2D_peaks(arr2D: np.array, plot: bool=False, amp_min: Union[int, float]=D
     return zip(frequency_idx, time_idx)
 
 
-def generate_hashes(peaks, fan_value: int=DEFAULT_FAN_VALUE):
+def generate_hashes(peaks, fan_value: int = DEFAULT_FAN_VALUE):
     """
     Hash list structure:
        sha1_hash[0:20]    time_offset
