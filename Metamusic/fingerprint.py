@@ -13,7 +13,6 @@ IDX_TIME_J = 1
 # Sampling rate, related to the Nyquist conditions, which affects
 # the range frequencies we can detect.
 DEFAULT_FS = 44100
-
 ######################################################################
 # Size of the FFT window, affects frequency granularity
 DEFAULT_WINDOW_SIZE = 4096
