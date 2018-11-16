@@ -78,7 +78,7 @@ setuptools.setup(
     author_email="yunik.maharjan@icloud.com",
     license='MIT',
     description="Metamusic",
-    platforms="Linux, MacOS, Windows",
+    platforms="Linux, MacOS",
     long_description=open('README.md').read(),
     include_package_data=True,
     install_requires=[i for i in REQUIREMENTS],
