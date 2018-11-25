@@ -34,7 +34,7 @@ class MetaMusic():
             self.songhashes_set.add(binascii.hexlify(
                 song.file_sha1).decode('utf-8'))
 
-    def fingerprint_directory(self, path: str, nprocesses: int=None)->None:
+    def fingerprint_directory(self, path: str, nprocesses: int = None)->None:
 
         # Try to use the maximum amount of processes if not given.
         try:
@@ -98,7 +98,6 @@ class MetaMusic():
                 database.insert_hashes(sid, song_hashes)
 
                 database.set_fingerprinted_flag(sid)
-                print('ssssssssssss')
         pool.close()
         pool.join()
 
@@ -121,8 +120,8 @@ class MetaMusic():
     def recognize(self, recognizer: Union[FileRecognizer, MicrophoneRecognizer], *options, **kwoptions)->dict:
         return recognizer.recognize(*options, **kwoptions)
 
-    def find_matches(self, samples: list, Fs: int =fingerprint.DEFAULT_FS)->Iterator[tuple]:
-        hashes : Iterator =   fingerprint.fingerprint(samples, Fs=Fs)
+    def find_matches(self, samples: list, Fs: int = fingerprint.DEFAULT_FS)->Iterator[tuple]:
+        hashes: Iterator = fingerprint.fingerprint(samples, Fs=Fs)
         return database.return_matches(hashes)
 
     def align_matches(self, matches: list)->Optional[dict]:
