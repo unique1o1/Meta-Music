@@ -19,19 +19,23 @@ Meta-Music is an open-source project that lets people add metadata to their Musi
 
        $ nano Metamusic/config
        
-### Database Creation
 
-       $ python3.6
-       >>> from Metamusic import database
-       >>> database.metadata.create_all()
-   
        
 # Using docker
 
        cd Meta-Music
        docker build -t meta-music:latest . 
        docker run --rm -ti -v /your/local/pathto/Music:/music meta-music:latest
-       
+ ## Creating database on docker
+       docker run --name postgres-sql -e POSTGRES_PASSWORD=0 -d postgres
+       docker exec -ti -u root postgres-sql bash
+       psql -U postgres
+       create database metamusic
+ ## Database table Creation
+       $ python3.6
+       >>> from Metamusic import database
+       >>> database.metadata.create_all()
+   
  **Note: do change IP in /static/dist/Worker.js to your docker containers IP**
        
        docker inspect <your container's name> | grep -i 'ipaddress'  //to find your docker container's IP
