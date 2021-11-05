@@ -90,14 +90,13 @@ def get_song_by_id(sid: int)->songs:
     return session.query(songs).filter(songs.song_id == sid).one_or_none()
 
 
-def get_songs()->Iterator:
+def get_songs() -> Iterator:
     """
     Return songs that have the fingerprinted flag set TRUE (1).
     """
     with session_withcommit() as session:
         val = session.query(songs).all()
-        for row in val:
-            yield row
+        yield from val
 
 
 def set_fingerprinted_flag(id)->None:
